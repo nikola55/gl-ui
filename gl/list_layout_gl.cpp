@@ -56,7 +56,6 @@ void ListLayout_GL::draw() {
             Translate(0,2)=tx;
             Translate(1,2)=ty;
             mat Transform = T*Translate;
-            std::cout << Transform << std::endl;
             cv->width(cvWidth);
             cv->height(cvHeight);
             cd->transform(Transform);

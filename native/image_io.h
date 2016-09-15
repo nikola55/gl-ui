@@ -9,8 +9,6 @@ namespace native {
 
 GLuint loadFromURI(const std::string& URI, GLuint& w_out, GLuint& h_out);
 
-//GLuint loadFromFile(const std::string& fileName, GLuint& w_out, GLuint& h_out);
-
 ui::image loadFromFile(const std::string &path);
 
 }

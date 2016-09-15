@@ -170,6 +170,7 @@ private:
     byte m_BitsPerSample;
 };
 
+
 template < class _Type > struct vec2 {
     _Type x;
     _Type y;
@@ -224,6 +225,43 @@ inline std::ostream& operator<<(std::ostream &os, const mat &m) {
     os << m(2,0) << ", " << m(2,1) << ", " << m(2,2) << std::endl;
     return os;
 }
+
+class glyph : public image {
+
+public:
+
+    glyph(uint w, uint h, uint l, uint t, point a, byte *data, bool f) :
+        image(w, h, 8, data, f),
+        m_Left(l),
+        m_Top(t),
+        m_Advance(a) {
+
+    }
+
+    glyph(const glyph &x) :
+        image(x),
+        m_Left(x.m_Left),
+        m_Top(x.m_Top),
+        m_Advance(x.m_Advance) {
+
+    }
+
+    glyph& operator=(const glyph &x) {
+        this->image::operator =(x);
+        m_Left = x.m_Left;
+        m_Top = x.m_Top;
+        m_Advance = x.m_Advance;
+    }
+
+    uint left() const { return m_Left; }
+    uint top() const { return m_Top; }
+    point advance() const { return m_Advance; }
+
+private:
+    uint m_Left;
+    uint m_Top;
+    point m_Advance;
+};
 
 }
 

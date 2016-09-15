@@ -13,29 +13,25 @@ using gl::ShaderProgram;
 
 Icon_GL::Icon_GL(const std::string &URI) :
     Icon(URI),
-    T(3,3),
+    m_Transformation(3,3),
     m_Texture(new Texture(URI)),
     m_Coord(VertexBuffer<GLfloat>::getRect3(m_Texture->width(), m_Texture->height())),
     m_TexCoord(VertexBuffer<GLfloat>::getSquareTexCoord()),
-    m_Shader(new ShaderProgram(sc_vertexShader, sc_fragShader)) {
+    m_Shader(new ShaderProgram(sc_VertexShader, sc_FragShader)) {
 
-    ui::eye3x3(T);
+    ui::eye3x3(m_Transformation);
 
     width(m_Texture->width());
     height(m_Texture->height());
 
 }
 
-Icon_GL::~Icon_GL() {
-
-}
-
 mat Icon_GL::transform() {
-    return T;
+    return m_Transformation;
 }
 
-void Icon_GL::transform(mat t) {
-    T = t;
+void Icon_GL::transform(mat transf) {
+    m_Transformation = transf;
 }
 
 void Icon_GL::draw() {
@@ -63,10 +59,11 @@ void Icon_GL::draw() {
     eye3x3(S);
     S(0,0) = float(width()) / float(m_Texture->width());
     S(1,1) = float(height()) / float(m_Texture->height());
-    T = T*S;
+    mat T = transform();
+    m_Transformation = T*S;
 
     GLint transformLocation = m_Shader->uniformLocation("u_T");
-    glUniformMatrix3fv(transformLocation, 1, GL_FALSE, &T(0,0));
+    glUniformMatrix3fv(transformLocation, 1, GL_FALSE, &m_Transformation(0,0));
     assert(glGetError()==GL_NO_ERROR);
 
     assert(m_Texture->loaded());
@@ -81,7 +78,7 @@ void Icon_GL::draw() {
     assert(glGetError()==GL_NO_ERROR);
 }
 
-const std::string Icon_GL::sc_vertexShader =
+const std::string Icon_GL::sc_VertexShader =
     "precision mediump float;\n"
     "attribute vec3 a_pos;\n"
     "attribute vec2 a_coord;\n"
@@ -92,7 +89,7 @@ const std::string Icon_GL::sc_vertexShader =
     "   v_coord = a_coord;"
     "}";
 
-const std::string Icon_GL::sc_fragShader =
+const std::string Icon_GL::sc_FragShader =
     "precision mediump float;\n"
     "varying vec2 v_coord;\n"
     "uniform sampler2D u_icon;\n"

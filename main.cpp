@@ -21,22 +21,23 @@ int main(int argc, char *argv[])
     background->height(root->height());
     screen->addChild(background);
     ui::shared_ptr<ui::View> listViewBox = new gl::Icon_GL("/home/nikola/shadow.png");
-    ui::point textBoxPos = { 100, 100 };
-    listViewBox->width(600);
-    listViewBox->height(300);
-    listViewBox->position(textBoxPos);
+    ui::point listViewPos = { 50, 50 };
+    listViewBox->width(700);
+    listViewBox->height(120);
+    listViewBox->margin(15);
+    listViewBox->position(listViewPos);
 
 
-    ui::shared_ptr<ui::Layout> list = new gl::ListLayout_GL(false);
-    list->height(300);
-    list->width(600);
+    ui::shared_ptr<ui::Layout> list = new gl::ListLayout_GL(true);
+    list->height(120);
+    list->width(700);
     list->padding(10);
-    ui::point pos = { 100, 100 };
+    ui::point pos = { 50, 50 };
     list->position(pos);
 
-    ui::shared_ptr<ui::View> icon = new gl::Icon_GL("/home/nikola/BNT1_logo.svg.png");
-    icon->width(150);
-    icon->height(150);
+    ui::shared_ptr<ui::View> icon = new gl::Icon_GL("/home/nikola/387b93c8b66379c32e1cc2b98dcf5197.png");
+    icon->width(120);
+    icon->height(120);
     list->addChild(icon);
     list->addChild(icon);
     list->addChild(icon);

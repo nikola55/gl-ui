@@ -25,20 +25,6 @@ template < class _Type > VertexBuffer<_Type>::~VertexBuffer() {
     }
 }
 
-static const GLfloat vertex_data[] = {
-    -1.0, -1.0, 1.0,
-    1.0, -1.0, 1.0,
-    1.0, 1.0, 1.0,
-    -1.0, 1.0, 1.0
-};
-
-//namespace gl {
-//template <  >  VertexBuffer<GLfloat>& VertexBuffer<GLfloat>::getSquare3() {
-//    static VertexBuffer gSquare3(vertex_data, sizeof(vertex_data));
-//    return gSquare3;
-//}
-//}
-
 static const GLfloat sq_tex_coord[] = {
     0.0, 1.0,
     1.0, 1.0,
@@ -48,7 +34,7 @@ static const GLfloat sq_tex_coord[] = {
 
 namespace gl {
 
-template <  > shared_ptr<VertexBuffer<GLfloat> > VertexBuffer<GLfloat>::getSquareTexCoord() {
+template < > shared_ptr<VertexBuffer<GLfloat> > VertexBuffer<GLfloat>::getSquareTexCoord() {
     return new VertexBuffer<GLfloat>(sq_tex_coord, sizeof(sq_tex_coord));
 }
 

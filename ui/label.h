@@ -7,13 +7,11 @@ namespace ui {
 
 class Label : public RectangleBaseView {
 public:
-    Label(const std::string& text="");
 
-    const std::string& text() const { return m_Text; }
-    void text(const std::string& text) { m_Text = text; }
-
+    virtual const std::string& text() const = 0;
+    virtual void text(const std::string& text)  = 0;
 private:
-    std::string m_Text;
+
 };
 
 }

@@ -72,6 +72,7 @@ protected:
         m_data(data),
         m_ref_count(new unsigned(1)),
         m_freeData(freeData) {
+
     }
 public:
 
@@ -124,11 +125,11 @@ public:
         return *this;
     }
 
-    _Type & operator()(unsigned x, unsigned y) {
+    _Type& operator()(unsigned x, unsigned y) {
         return m_data[m_width * y + x];
     }
 
-    const _Type & operator()(unsigned x, unsigned y) const {
+    const _Type& operator()(unsigned x, unsigned y) const {
         return m_data[m_width * y + x];
     }
 
@@ -170,7 +171,6 @@ private:
     byte m_BitsPerSample;
 };
 
-
 template < class _Type > struct vec2 {
     _Type x;
     _Type y;
@@ -196,7 +196,6 @@ inline void trans3x3(mat &m, float x, float y) {
     m(0, 2) = x;
     m(1, 2) = y;
 }
-
 
 inline mat operator*(const mat &A, const mat &B) {
     bool allowed = A.width() == 3 && A.height() == 3 &&
@@ -226,15 +225,34 @@ inline std::ostream& operator<<(std::ostream &os, const mat &m) {
     return os;
 }
 
+struct glyph_info {
+
+    point advance;
+    uint width;
+    uint height;
+    uint left;
+    uint top;
+
+    glyph_info(point a, uint w, uint h, uint l, uint t) :
+        advance(a),
+        width(w),
+        height(h),
+        left(l),
+        top(t) {
+
+    }
+
+};
+
 class glyph : public image {
 
 public:
 
     glyph(uint w, uint h, uint l, uint t, point a, byte *data, bool f) :
         image(w, h, 8, data, f),
+        m_Advance(a),
         m_Left(l),
-        m_Top(t),
-        m_Advance(a) {
+        m_Top(t) {
 
     }
 
@@ -257,10 +275,18 @@ public:
     uint top() const { return m_Top; }
     point advance() const { return m_Advance; }
 
+    void getInfo(glyph_info &out) {
+        out.advance = m_Advance;
+        out.width = width();
+        out.height = height();
+        out.left = left();
+        out.top = top();
+    }
+
 private:
+    point m_Advance;
     uint m_Left;
     uint m_Top;
-    point m_Advance;
 };
 
 }

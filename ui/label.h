@@ -10,6 +10,10 @@ public:
 
     virtual const std::string& text() const = 0;
     virtual void text(const std::string& text)  = 0;
+
+    virtual void size(uint) = 0;
+    virtual uint size() const = 0;
+
 private:
 
 };

@@ -11,7 +11,7 @@ typedef uint8_t byte;
 
 template <class Ptr> class shared_ptr {
 
-    template<typename Ptr2> friend class shared_ptr;
+    template<class Ptr2> friend class shared_ptr;
 
 protected:
 
@@ -242,51 +242,6 @@ struct glyph_info {
 
     }
 
-};
-
-class glyph : public image {
-
-public:
-
-    glyph(uint w, uint h, uint l, uint t, point a, byte *data, bool f) :
-        image(w, h, 8, data, f),
-        m_Advance(a),
-        m_Left(l),
-        m_Top(t) {
-
-    }
-
-    glyph(const glyph &x) :
-        image(x),
-        m_Left(x.m_Left),
-        m_Top(x.m_Top),
-        m_Advance(x.m_Advance) {
-
-    }
-
-    glyph& operator=(const glyph &x) {
-        this->image::operator =(x);
-        m_Left = x.m_Left;
-        m_Top = x.m_Top;
-        m_Advance = x.m_Advance;
-    }
-
-    uint left() const { return m_Left; }
-    uint top() const { return m_Top; }
-    point advance() const { return m_Advance; }
-
-    void getInfo(glyph_info &out) {
-        out.advance = m_Advance;
-        out.width = width();
-        out.height = height();
-        out.left = left();
-        out.top = top();
-    }
-
-private:
-    point m_Advance;
-    uint m_Left;
-    uint m_Top;
 };
 
 }

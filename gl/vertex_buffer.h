@@ -27,28 +27,9 @@ public:
 
     static ui::shared_ptr<VertexBuffer> getRect3(ui::uint w, ui::uint h);
 
+    static ui::shared_ptr<VertexBuffer> create(const _Type *buf, unsigned bufSz);
+
 };
-
-template < class _Type > VertexBuffer<_Type>::VertexBuffer(const _Type *buf, unsigned bufSz) : m_bufferId(0) {
-    glGenBuffers(1, &m_bufferId);
-    if(glGetError() != GL_NO_ERROR) {
-        m_bufferId = 0;
-        return;
-    }
-    glBindBuffer(GL_ARRAY_BUFFER, m_bufferId);
-    glBufferData(GL_ARRAY_BUFFER, bufSz, buf, GL_STATIC_DRAW);
-    if(glGetError() != GL_NO_ERROR) {
-        glDeleteBuffers(1, &m_bufferId);
-        m_bufferId = 0;
-    }
-}
-
-template < class _Type > VertexBuffer<_Type>::~VertexBuffer() {
-    if(m_bufferId != 0) {
-        glDeleteBuffers(1, &m_bufferId);
-        m_bufferId = 0;
-    }
-}
 
 }
 

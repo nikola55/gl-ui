@@ -84,8 +84,8 @@ void Label_GL::initialize() {
     width(cx);
     height(m_TextSize);
 
-    m_VertexBuffer = new VertexBuffer< GLfloat >( &vertexCoord[0], vertexCoord.size()*sizeof(GLfloat) );
-    m_CoordBuffer = new VertexBuffer < GLfloat >( &textureCoord[0], textureCoord.size()*sizeof(GLfloat) );
+    m_VertexBuffer = VertexBuffer< GLfloat >::create( &vertexCoord[0], vertexCoord.size()*sizeof(GLfloat) );
+    m_CoordBuffer = VertexBuffer< GLfloat >::create( &textureCoord[0], textureCoord.size()*sizeof(GLfloat) );
 
 }
 

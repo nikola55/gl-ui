@@ -1,5 +1,6 @@
 #include <iostream>
 #include <unistd.h>
+#include "view_factory_gl.h"
 #include "root_layout_gl.h"
 #include "icon_gl.h"
 #include "absolute_layout_gl.h"
@@ -9,39 +10,44 @@
 #include <unistd.h>
 
 using gl::RootLayout_GL;
+using gl::ViewFactory_GL;
 
-int main(int argc, char *argv[])
-{
-    ui::shared_ptr<RootLayout_GL> root = RootLayout_GL::create(800, 600);
-    ui::shared_ptr<ui::Layout> screen = new gl::AbsoluteLayout_GL;
+using ui::ViewFactory;
+using ui::shared_ptr;
+using ui::point;
 
-//    screen->width(root->width());
-//    screen->height(root->height());
+int main(int argc, char *argv[]) {
 
-    ui::shared_ptr<ui::View> background = new gl::Icon_GL("/home/nikola/7031585-purple-plain-background.jpg");
+    shared_ptr<RootLayout_GL> root = RootLayout_GL::create(1366, 768);
+    shared_ptr<ViewFactory> viewFactory = new ViewFactory_GL;
+
+    shared_ptr<ui::AbsoluteLayout> screen = viewFactory->makeAbsoluteLayout();
+    screen->width(root->width());
+    screen->height(root->height());
+
+    shared_ptr<ui::Icon> background = viewFactory->makeIcon("/home/nikola/7031585-purple-plain-background.jpg");
     background->width(root->width());
     background->height(root->height());
     screen->addChild(background);
 
-
-    ui::shared_ptr<gl::Label_GL> label = new  gl::Label_GL("decoder technical itch", 24);
-    ui::point p = { 100, 100 };
+    shared_ptr<ui::Label> label =viewFactory->makeLabel("Yes", 24);
+    point p = { 100, 100 };
     label->position(p);
 
-    ui::shared_ptr<ui::View> listViewBox = new gl::Icon_GL("/home/nikola/label_box.png");
-    listViewBox->width(label->width()+20);
-    listViewBox->height(label->height()+20);
-    listViewBox->margin(10);
-    ui::point p2 = { p.x - 10, p.y - 10 };
-    listViewBox->position(p2);
+    shared_ptr<ui::Icon> labelBox = viewFactory->makeIcon("/home/nikola/label_box.png");
+    labelBox->width(label->width()+20);
+    labelBox->height(label->height()+20);
+    labelBox->margin(10);
+    point p2 = { p.x - 10, p.y - 10 };
+    labelBox->position(p2);
 
-    screen->addChild(listViewBox);
+    screen->addChild(labelBox);
     screen->addChild(label);
     root->addChild(screen);
+
     while(true) {
         root->draw();
         usleep(33333);
-        pause();
     }
 
 }

@@ -139,7 +139,7 @@ shared_ptr< GlyphAtlas > GlyphAtlas::forSize(uint sz) {
     map<uint, shared_ptr<GlyphAtlas> >::iterator iter = s_PreloadedBySize.find(sz);
     if(iter == s_PreloadedBySize.end()) {
         // unhardcode
-        shared_ptr<GlyphAtlas> atlas = new GlyphAtlas("/home/nikola/Qt_Creator_Projects/UI/res/FreeSans.ttf", sz);
+        shared_ptr<GlyphAtlas> atlas = new GlyphAtlas("/home/nikola/Qt_Creator_Projects/UI/res/SourceCodePro-Regular.ttf", sz);
         pair<uint, shared_ptr<GlyphAtlas> > insert(sz, atlas);
         pair<map<uint, shared_ptr<GlyphAtlas> >::iterator,bool> res = s_PreloadedBySize.insert(insert);
         iter = res.first;

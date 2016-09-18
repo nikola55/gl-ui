@@ -7,6 +7,7 @@
 #include "list_layout_gl.h"
 #include "glyph_atlas.h"
 #include "label_gl.h"
+#include "example_custom_view_gl.h"
 #include <unistd.h>
 
 using gl::RootLayout_GL;
@@ -30,24 +31,22 @@ int main(int argc, char *argv[]) {
     background->height(root->height());
     screen->addChild(background);
 
-    shared_ptr<ui::Label> label =viewFactory->makeLabel("Yes", 24);
-    point p = { 100, 100 };
-    label->position(p);
+    shared_ptr<gl::ExampleCustomView_GL> ex =
+            new gl::ExampleCustomView_GL("/home/nikola/Downloads/tv_15.png",
+                                         "Watch TV", 18, gl::ExampleCustomView_GL::RIGHT);
 
-    shared_ptr<ui::Icon> labelBox = viewFactory->makeIcon("/home/nikola/label_box.png");
-    labelBox->width(label->width()+20);
-    labelBox->height(label->height()+20);
-    labelBox->margin(10);
-    point p2 = { p.x - 10, p.y - 10 };
-    labelBox->position(p2);
+    point pos = { 100, 100 };
+    ex->position(pos);
+    ex->height(50);
+    ex->width(50);
+    screen->addChild(ex);
 
-    screen->addChild(labelBox);
-    screen->addChild(label);
     root->addChild(screen);
 
     while(true) {
         root->draw();
         usleep(33333);
+        pause();
     }
 
 }

@@ -1,0 +1,48 @@
+#ifndef EXAMPLECUSTOMVIEW_GL_H
+#define EXAMPLECUSTOMVIEW_GL_H
+#include "drawable_gl.h"
+#include "rectangle_base_view.h"
+#include "icon_gl.h"
+#include "label_gl.h"
+
+namespace gl {
+
+class ExampleCustomView_GL : public ui::RectangleBaseView, public Drawable_GL {
+
+public:
+
+    enum TextPosition {
+        LEFT,
+        RIGHT,
+        ABOVE,
+        BELOW
+    };
+
+    ExampleCustomView_GL(const std::string &iconURI, const std::string text, ui::uint textSize, TextPosition textPos);
+
+    void draw();
+
+    void transform(ui::mat T) { m_Transform = T; }
+
+    ui::mat transform() { return m_Transform; }
+
+    void width(ui::uint w) {
+        m_Icon->width(w);
+        RectangleBaseView::width(w);
+    }
+
+    void height(ui::uint h) {
+        m_Icon->height(h);
+        RectangleBaseView::height(h);
+    }
+
+private:
+    ui::shared_ptr<Icon_GL> m_Icon;
+    ui::shared_ptr<Label_GL> m_Label;
+    ui::mat m_Transform;
+    TextPosition m_TextPosition;
+};
+
+}
+
+#endif // EXAMPLECUSTOMVIEW_GL_H

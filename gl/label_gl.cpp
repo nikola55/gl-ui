@@ -146,5 +146,5 @@ const string Label_GL::cs_FShaderSource =
         "varying vec2 v_coord;\n"
         "uniform sampler2D u_glyphs;\n"
         "void main() {\n"
-        "   gl_FragColor = vec4(0,0,0,texture2D(u_glyphs, v_coord).a);\n"
+        "   gl_FragColor = vec4(1.0,1.0,1.0,texture2D(u_glyphs, v_coord).a);\n"
         "}\n";

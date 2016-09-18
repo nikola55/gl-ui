@@ -86,8 +86,8 @@ const std::string Icon_GL::sc_VertexShader =
     "uniform mat3 u_T;\n"
     "void main() {\n"
     "   gl_Position = vec4(u_T*a_pos, 1.0);\n"
-    "   v_coord = a_coord;"
-    "}";
+    "   v_coord = a_coord;\n"
+    "}\n";
 
 const std::string Icon_GL::sc_FragShader =
     "precision mediump float;\n"
@@ -95,4 +95,4 @@ const std::string Icon_GL::sc_FragShader =
     "uniform sampler2D u_icon;\n"
     "void main() {\n"
     "   gl_FragColor = texture2D(u_icon, v_coord);\n"
-    "}";
+    "}\n";

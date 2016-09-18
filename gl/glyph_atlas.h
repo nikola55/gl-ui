@@ -9,6 +9,10 @@ namespace gl {
 
 class GlyphAtlas {
 
+    static std::map< ui::uint, ui::shared_ptr<GlyphAtlas> > s_PreloadedBySize;
+
+private:
+
     GlyphAtlas(const GlyphAtlas &) { }
 
     GlyphAtlas& operator=(const GlyphAtlas &) { }
@@ -34,7 +38,7 @@ public:
         if(glyphInfo != m_GlyphInfo.end()) {
             return glyphInfo->second.second;
         } else {
-            static ui::vec2<float> defaultLocation;
+            static ui::vec2<float> defaultLocation = {0,0};
             return defaultLocation;
         }
     }
@@ -47,9 +51,18 @@ public:
         return m_TextureId != 0;
     }
 
+    float width() const { return m_Width; }
+
+    float height() const { return m_Height; }
+
+    static ui::shared_ptr< GlyphAtlas > forSize(ui::uint sz);
+
 private:
     std::map< ui::uint, std::pair< ui::glyph_info, ui::vec2< float > > > m_GlyphInfo;
+    float m_Width;
+    float m_Height;
     GLuint m_TextureId;
+
 };
 
 }

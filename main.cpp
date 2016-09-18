@@ -5,57 +5,43 @@
 #include "absolute_layout_gl.h"
 #include "list_layout_gl.h"
 #include "glyph_atlas.h"
+#include "label_gl.h"
 #include <unistd.h>
 
 using gl::RootLayout_GL;
 
 int main(int argc, char *argv[])
 {
-//    ui::shared_ptr<RootLayout_GL> root = RootLayout_GL::create(800, 600);
-//    ui::shared_ptr<ui::Layout> screen = new gl::AbsoluteLayout_GL;
+    ui::shared_ptr<RootLayout_GL> root = RootLayout_GL::create(800, 600);
+    ui::shared_ptr<ui::Layout> screen = new gl::AbsoluteLayout_GL;
 
 //    screen->width(root->width());
 //    screen->height(root->height());
 
-//    ui::shared_ptr<ui::View> background = new gl::Icon_GL("/home/nikola/7031585-purple-plain-background.jpg");
-//    background->width(root->width());
-//    background->height(root->height());
-//    screen->addChild(background);
-//    ui::shared_ptr<ui::View> listViewBox = new gl::Icon_GL("/home/nikola/shadow.png");
-//    ui::point listViewPos = { 50, 50 };
-//    listViewBox->width(700);
-//    listViewBox->height(120);
-//    listViewBox->margin(15);
-//    listViewBox->position(listViewPos);
+    ui::shared_ptr<ui::View> background = new gl::Icon_GL("/home/nikola/7031585-purple-plain-background.jpg");
+    background->width(root->width());
+    background->height(root->height());
+    screen->addChild(background);
 
 
-//    ui::shared_ptr<ui::Layout> list = new gl::ListLayout_GL(true);
-//    list->height(120);
-//    list->width(700);
-//    list->padding(10);
-//    ui::point pos = { 50, 50 };
-//    list->position(pos);
+    ui::shared_ptr<gl::Label_GL> label = new  gl::Label_GL("decoder technical itch", 24);
+    ui::point p = { 100, 100 };
+    label->position(p);
 
-//    ui::shared_ptr<ui::View> icon = new gl::Icon_GL("/home/nikola/387b93c8b66379c32e1cc2b98dcf5197.png");
-//    icon->width(120);
-//    icon->height(120);
-//    list->addChild(icon);
-//    list->addChild(icon);
-//    list->addChild(icon);
-//    list->addChild(icon);
-//    list->addChild(icon);
-//    list->addChild(icon);
+    ui::shared_ptr<ui::View> listViewBox = new gl::Icon_GL("/home/nikola/label_box.png");
+    listViewBox->width(label->width()+20);
+    listViewBox->height(label->height()+20);
+    listViewBox->margin(10);
+    ui::point p2 = { p.x - 10, p.y - 10 };
+    listViewBox->position(p2);
 
-//    screen->addChild(list);
-//    screen->addChild(listViewBox);
-
-    gl::GlyphAtlas ga("/home/nikola/freefont-20120503/FreeSans.ttf", 12);
-
-//    root->addChild(screen);
-//    while(true) {
-//        root->draw();
-//        usleep(33333);
-//        pause();
-//    }
+    screen->addChild(listViewBox);
+    screen->addChild(label);
+    root->addChild(screen);
+    while(true) {
+        root->draw();
+        usleep(33333);
+        pause();
+    }
 
 }

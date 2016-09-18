@@ -25,19 +25,16 @@ void AbsoluteLayout_GL::draw() {
 
     for(; childrenIter != m_Children.end() ; childrenIter++) {
         View *currChild = *childrenIter;
-        Drawable_GL *drawable = 0;
-        if(drawable = dynamic_cast<Drawable_GL*>(currChild)) {
+        if(Drawable_GL *drawable = dynamic_cast<Drawable_GL*>(currChild)) {
 
             point pos = currChild->position();
             uint w = currChild->width();
             uint h = currChild->height();
-            glScissor(pos.x, pos.y, w, h);
 
             mat Translate(3,3);
             eye3x3(Translate);
             trans3x3(Translate, pos.x, pos.y);
             mat TransfChld = T*Translate;
-
             drawable->transform(TransfChld);
             currChild->draw();
         }

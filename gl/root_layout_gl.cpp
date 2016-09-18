@@ -69,8 +69,6 @@ void RootLayout_GL::draw() {
     uint w = m_RootView->width();
     uint h = m_RootView->height();
 
-    glScissor(pos.x, pos.y, w, h);
-
     Drawable_GL &drawable = dynamic_cast<Drawable_GL&>(*m_RootView);
 
     mat TranslateChild(3,3);
@@ -78,7 +76,7 @@ void RootLayout_GL::draw() {
     TranslateChild(0,2) = pos.x;
     TranslateChild(1,2) = pos.y;
     mat TransformChild = T*TranslateChild;
-    std::cout << TransformChild;
+
     drawable.transform(TransformChild);
 
     m_RootView->draw();

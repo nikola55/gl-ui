@@ -1,5 +1,4 @@
 #include "glyph_atlas.h"
-#include <iostream>
 #include <algorithm>
 #include <stdexcept>
 #include <ft2build.h>
@@ -10,10 +9,6 @@ using std::map;
 using std::string;
 using std::pair;
 
-using std::cout;
-using std::endl;
-
-
 using gl::GlyphAtlas;
 using gl::Texture;
 
@@ -21,6 +16,7 @@ using ui::glyph_info;
 using ui::point;
 using ui::uint;
 using ui::vec2;
+using ui::shared_ptr;
 
 static FT_Library ftLib;
 
@@ -57,25 +53,27 @@ static FT_Lib gs_FTLib;
 GlyphAtlas::GlyphAtlas(const std::string &font, uint size) : m_TextureId(0) {
 
     if(!gs_FTLib.ok()) {
-        throw runtime_error("could not initialize freetype");
+        throw runtime_error("cannot initialize freetype");
     }
     FT_Face face;
     if(FT_New_Face(gs_FTLib.lib(), font.c_str(), 0, &face) != 0) {
-        throw runtime_error("could not load "+font);
+        throw runtime_error("cannot load "+font);
     }
+
     FT_Set_Pixel_Sizes(face, 0, size);
     FT_GlyphSlot g = face->glyph;
-    uint texWidth = 0;
-    uint texHeight = 0;
+
+    m_Width = 0;
+    m_Height = 0;
     for(uint i = 32 ; i < 128 ; i++) {
         if (FT_Load_Char(face, i, FT_LOAD_RENDER)!=0) {
-            fprintf(stderr, "Loading character '%c' failed!\n", i);
-            continue;
+            FT_Done_Face(face);
+            char m[2] = { char(i), 0 };
+            throw runtime_error("cannot load char " + string(m));
         }
-
         FT_Bitmap &bitmap = g->bitmap;
-        texWidth+=bitmap.width+1;
-        texHeight = std::max(texHeight, uint(g->bitmap.rows));
+        m_Width += bitmap.width+1;
+        m_Height = std::max(m_Height, float(g->bitmap.rows));
     }
 
     glGenTextures(1, &m_TextureId);
@@ -85,12 +83,13 @@ GlyphAtlas::GlyphAtlas(const std::string &font, uint size) : m_TextureId(0) {
         throw runtime_error("cannot generate texture");
     }
     glBindTexture(GL_TEXTURE_2D, m_TextureId);
-    glTexImage2D(GL_TEXTURE, 0, GL_ALPHA, texWidth, texHeight, 0, GL_ALPHA, GL_UNSIGNED_BYTE, 0);
-    if(glGetError() != GL_NO_ERROR) {
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, GLuint(m_Width), GLuint(m_Height), 0, GL_ALPHA, GL_UNSIGNED_BYTE, 0);
+    GLenum err = glGetError();
+    if(err != GL_NO_ERROR) {
         glDeleteTextures(1, &m_TextureId);
         FT_Done_Face(face);
         m_TextureId = 0;
-        throw runtime_error("cannot generate texture");
+        throw runtime_error("cannot create texture");
     }
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -104,19 +103,22 @@ GlyphAtlas::GlyphAtlas(const std::string &font, uint size) : m_TextureId(0) {
     for(uint i = 32 ; i < 128 ; i++) {
 
         if (FT_Load_Char(face, i, FT_LOAD_RENDER)!=0) {
-            fprintf(stderr, "Loading character '%c' failed!\n", i);
-            continue;
+            glDeleteTextures(1, &m_TextureId);
+            FT_Done_Face(face);
+            m_TextureId = 0;
+            char m[2] = { char(i), 0 };
+            throw runtime_error("cannot load char " + string(m));
         }
 
         FT_Bitmap &bitmap = g->bitmap;
 
         glyph_info gy = {
-            { g->advance.x, g->advance.y },
+            { g->advance.x>>6, g->advance.y>>6 },
             bitmap.width, bitmap.rows,
             g->bitmap_left, g->bitmap_top
         };
         vec2<float> loc = {
-            ox / texWidth, 0
+            ox / m_Width, 0
         };
 
         glTexSubImage2D(GL_TEXTURE_2D, 0, ox, oy, gy.width, gy.height, GL_ALPHA, GL_UNSIGNED_BYTE, bitmap.buffer);
@@ -129,6 +131,20 @@ GlyphAtlas::GlyphAtlas(const std::string &font, uint size) : m_TextureId(0) {
     }
 
     FT_Done_Face(face);
+}
+
+map<uint, shared_ptr<GlyphAtlas> > GlyphAtlas::s_PreloadedBySize;
+
+shared_ptr< GlyphAtlas > GlyphAtlas::forSize(uint sz) {
+    map<uint, shared_ptr<GlyphAtlas> >::iterator iter = s_PreloadedBySize.find(sz);
+    if(iter == s_PreloadedBySize.end()) {
+        // unhardcode
+        shared_ptr<GlyphAtlas> atlas = new GlyphAtlas("/home/nikola/Qt_Creator_Projects/UI/res/FreeSans.ttf", sz);
+        pair<uint, shared_ptr<GlyphAtlas> > insert(sz, atlas);
+        pair<map<uint, shared_ptr<GlyphAtlas> >::iterator,bool> res = s_PreloadedBySize.insert(insert);
+        iter = res.first;
+    }
+    return iter->second;
 }
 
 GlyphAtlas::~GlyphAtlas() {

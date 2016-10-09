@@ -244,18 +244,6 @@ struct glyph_info {
 
 };
 
-union color {
-
-    struct {
-        uint8_t red;
-        uint8_t green;
-        uint8_t blue;
-        uint8_t alpha;
-    };
-
-    uint8_t data[4];
-};
-
 }
 
 #endif // UICOMMON_H

@@ -36,6 +36,10 @@ public:
         RectangleBaseView::height(h);
     }
 
+    void color(ui::byte r, ui::byte g, ui::byte b) {
+        m_Label->color(r,g,b);
+    }
+
 private:
     ui::shared_ptr<Icon_GL> m_Icon;
     ui::shared_ptr<Label_GL> m_Label;

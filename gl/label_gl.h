@@ -33,6 +33,12 @@ public:
         m_Transform = T;
     }
 
+    void color(ui::byte r, ui::byte g, ui::byte b) {
+        m_Color[0] = r/255.f;
+        m_Color[1] = g/255.f;
+        m_Color[2] = b/255.f;
+    }
+
     ui::mat transform() { return m_Transform; }
 
     void draw();
@@ -50,6 +56,8 @@ private:
     ui::shared_ptr< VertexBuffer<GLfloat> > m_VertexBuffer;
     ui::shared_ptr< VertexBuffer<GLfloat> > m_CoordBuffer;
     ui::shared_ptr< GlyphAtlas > m_GlyphAtlas;
+
+    float m_Color[3];
 
     static const std::string cs_VShaderSource;
     static const std::string cs_FShaderSource;

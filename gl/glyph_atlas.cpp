@@ -113,9 +113,9 @@ GlyphAtlas::GlyphAtlas(const std::string &font, uint size) : m_TextureId(0) {
         FT_Bitmap &bitmap = g->bitmap;
 
         glyph_info gy = {
-            { g->advance.x>>6, g->advance.y>>6 },
-            bitmap.width, bitmap.rows,
-            g->bitmap_left, g->bitmap_top
+            { (uint)g->advance.x>>6, (uint)g->advance.y>>6 },
+            (uint)bitmap.width, (uint)bitmap.rows,
+            (uint)g->bitmap_left, (uint)g->bitmap_top
         };
         vec2<float> loc = {
             ox / m_Width, 0
@@ -139,7 +139,7 @@ shared_ptr< GlyphAtlas > GlyphAtlas::forSize(uint sz) {
     map<uint, shared_ptr<GlyphAtlas> >::iterator iter = s_PreloadedBySize.find(sz);
     if(iter == s_PreloadedBySize.end()) {
         // unhardcode
-        shared_ptr<GlyphAtlas> atlas = new GlyphAtlas("/home/nikola/Qt_Creator_Projects/UI/res/SourceCodePro-Regular.ttf", sz);
+        shared_ptr<GlyphAtlas> atlas = new GlyphAtlas("/home/nikola/Qt_Creator_Projects/UI/res/FreeSans.ttf", sz);
         pair<uint, shared_ptr<GlyphAtlas> > insert(sz, atlas);
         pair<map<uint, shared_ptr<GlyphAtlas> >::iterator,bool> res = s_PreloadedBySize.insert(insert);
         iter = res.first;

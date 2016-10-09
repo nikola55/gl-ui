@@ -29,6 +29,10 @@ Label_GL::Label_GL(const string &text, uint size) :
 
     initialize();
 
+    m_Color[0] = 1.0;
+    m_Color[1] = 1.0;
+    m_Color[2] = 1.0;
+
 }
 
 void Label_GL::initialize() {
@@ -116,6 +120,11 @@ void Label_GL::draw() {
     glUniformMatrix3fv(TLoc, 1, GL_FALSE, &m_Transform(0,0));
     assert(glGetError()==GL_NO_ERROR);
 
+    GLint colorLoc = m_Shader->uniformLocation("u_color");
+    assert(colorLoc != -1);
+    glUniform3f(colorLoc, m_Color[0], m_Color[1], m_Color[2]);
+    assert(glGetError() == GL_NO_ERROR);
+
     assert(m_GlyphAtlas->loaded());
     GLint texLoc = m_Shader->uniformLocation("u_glyphs");
     assert(texLoc != -1);
@@ -144,7 +153,8 @@ const string Label_GL::cs_VShaderSource =
 const string Label_GL::cs_FShaderSource =
         "precision mediump float;\n"
         "varying vec2 v_coord;\n"
+        "uniform vec3 u_color;\n"
         "uniform sampler2D u_glyphs;\n"
         "void main() {\n"
-        "   gl_FragColor = vec4(1.0,1.0,1.0,texture2D(u_glyphs, v_coord).a);\n"
+        "   gl_FragColor = vec4(u_color, texture2D(u_glyphs, v_coord).a);\n"
         "}\n";

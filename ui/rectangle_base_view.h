@@ -11,14 +11,8 @@ public:
         m_Height(0),
         m_Margin(0),
         m_Padding(0) {
-
         m_Position.x = 0;
         m_Position.y = 0;
-
-        m_Background.red = 0;
-        m_Background.green = 0;
-        m_Background.blue = 0;
-        m_Background.alpha = 0;
     }
 
     point position() const { return m_Position; }
@@ -36,11 +30,7 @@ public:
     uint padding() const { return m_Padding; }
     void padding(uint p) { m_Padding = p; }
 
-    color background() { return m_Background; }
-    void background(color c) { m_Background = c; }
-
 protected:
-    color m_Background;
     point m_Position;
     uint m_Width;
     uint m_Height;

@@ -1,23 +1,32 @@
 #ifndef PRESSABLE_H
 #define PRESSABLE_H
-#include "view.h"
+#include "ui_common.h"
+
 namespace ui {
+
+class View;
 
 class Pressable {
 
+    bool m_pressed;
+
 public:
 
-    virtual bool pressed() const = 0;
-    virtual void pressed(bool) = 0;
+    Pressable() : m_pressed(false) { };
+
+    virtual ~Pressable() { };
+
+    virtual bool pressed() const { return false; };
+    virtual void pressed(bool) { };
 
     class OnPressHandler {
     public:
         virtual void onPressed(shared_ptr<View>) = 0;
     };
 
-    virtual void onPress(shared_ptr<OnPressHandler>);
+    virtual void onPress(shared_ptr<OnPressHandler>) { };
 
-    virtual shared_ptr<OnPressHandler> onPress();
+    virtual shared_ptr<OnPressHandler> onPress() { return 0; };
 
 };
 

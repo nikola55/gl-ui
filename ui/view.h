@@ -1,10 +1,12 @@
 #ifndef VIEW_H
 #define VIEW_H
 #include "ui_common.h"
+#include "focusable.h"
+#include "pressable.h"
 
 namespace ui {
 
-class View {
+class View : public Focusable, public Pressable {
 public:
     virtual point position() const = 0;
     virtual void position(point) = 0;
@@ -25,14 +27,6 @@ public:
 
     virtual ~View() { }
 
-protected:
-
-    static ulong nextId() {
-        return s_NextId++;
-    }
-
-private:
-    static ulong s_NextId;
 };
 
 }

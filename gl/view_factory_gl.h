@@ -1,5 +1,6 @@
 #ifndef VIEWFACTORY_GL_H
 #define VIEWFACTORY_GL_H
+
 #include "view_factory.h"
 
 namespace gl {

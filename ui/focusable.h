@@ -2,9 +2,12 @@
 #define FOCUSABLE_H
 namespace ui {
 class Focusable {
+    bool m_focused;
 public:
-    virtual bool focused() const = 0;
-    virtual void focused(bool) = 0;
+    Focusable() : m_focused(false) { };
+    virtual ~Focusable() { };
+    virtual bool focused() const { return m_focused; };
+    virtual void focused(bool f) { m_focused = f; };
 };
 }
 #endif // FOCUSABLE_H

@@ -24,11 +24,11 @@ mat ListLayout_GL::transform() {
 
 void ListLayout_GL::draw() {
 
-    std::list< shared_ptr< View > >::iterator chldIter = m_Children.begin();
+    std::list< shared_ptr< View > >::iterator chldIter = m_children.begin();
 
     uint offset = 0;
 
-    for(; chldIter != m_Children.end() ; chldIter++) {
+    for(; chldIter != m_children.end() ; chldIter++) {
         View *cv = *chldIter;
         if(Drawable_GL *cd = dynamic_cast<Drawable_GL*>(cv)) {
             float tx, ty, cvHeight, cvWidth;

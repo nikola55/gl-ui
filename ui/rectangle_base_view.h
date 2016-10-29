@@ -7,35 +7,35 @@ class RectangleBaseView : public View {
 public:
 
     RectangleBaseView() :
-        m_Width(0),
-        m_Height(0),
-        m_Margin(0),
-        m_Padding(0) {
-        m_Position.x = 0;
-        m_Position.y = 0;
+        m_width(0),
+        m_height(0),
+        m_margin(0),
+        m_padding(0) {
+        m_position.x = 0;
+        m_position.y = 0;
     }
 
-    point position() const { return m_Position; }
-    void position(point p) { m_Position = p; }
+    point position() const { return m_position; }
+    void position(point p) { m_position = p; }
 
-    uint width() const { return m_Width; }
-    void width(uint w) { m_Width = w; }
+    uint width() const { return m_width; }
+    void width(uint w) { m_width = w; }
 
-    uint height() const { return m_Height; }
-    void height(uint h) { m_Height = h; }
+    uint height() const { return m_height; }
+    void height(uint h) { m_height = h; }
 
-    uint margin() const { return m_Margin; }
-    void margin(uint m) { m_Margin = m; }
+    uint margin() const { return m_margin; }
+    void margin(uint m) { m_margin = m; }
 
-    uint padding() const { return m_Padding; }
-    void padding(uint p) { m_Padding = p; }
+    uint padding() const { return m_padding; }
+    void padding(uint p) { m_padding = p; }
 
 protected:
-    point m_Position;
-    uint m_Width;
-    uint m_Height;
-    uint m_Margin;
-    uint m_Padding;
+    point m_position;
+    uint m_width;
+    uint m_height;
+    uint m_margin;
+    uint m_padding;
 };
 }
 #endif // RECTANGLEBASEVIEW_H

@@ -21,9 +21,9 @@ mat AbsoluteLayout_GL::transform() {
 
 void AbsoluteLayout_GL::draw() {
 
-    std::list<shared_ptr<View> >::iterator childrenIter = m_Children.begin();
+    std::list<shared_ptr<View> >::iterator childrenIter = m_children.begin();
 
-    for(; childrenIter != m_Children.end() ; childrenIter++) {
+    for(; childrenIter != m_children.end() ; childrenIter++) {
         View *currChild = *childrenIter;
         if(Drawable_GL *drawable = dynamic_cast<Drawable_GL*>(currChild)) {
 

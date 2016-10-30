@@ -150,25 +150,25 @@ public:
 
     image(uint w, uint h, byte bitsPerPixel, byte *data, bool freeData) :
         grid(w, h, data, freeData),
-        m_BitsPerSample(bitsPerPixel) {
+        m_bitsPerSample(bitsPerPixel) {
     }
 
     image(const image &x) :
         grid(x),
-        m_BitsPerSample(x.m_BitsPerSample) {
+        m_bitsPerSample(x.m_bitsPerSample) {
     }
 
     image& operator=(const image &x) {
         this->grid::operator =(x);
-        m_BitsPerSample = x.m_BitsPerSample;
+        m_bitsPerSample = x.m_bitsPerSample;
     }
 
     byte bitsPerSample() const {
-        return m_BitsPerSample;
+        return m_bitsPerSample;
     }
 
 private:
-    byte m_BitsPerSample;
+    byte m_bitsPerSample;
 };
 
 template < class _Type > struct vec2 {

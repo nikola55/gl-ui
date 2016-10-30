@@ -35,6 +35,7 @@ Texture::Texture(const std::string &fileName) : m_textureId(0), m_width(0), m_he
         GLenum format = getFormat(img.bitsPerSample());
         m_width = img.width();
         m_height = img.height();
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 4); // ?
         glTexImage2D(GL_TEXTURE_2D, 0, format, m_width, m_height, 0, format, GL_UNSIGNED_BYTE, img.data());
         if(glGetError() != GL_NO_ERROR) {
             glDeleteTextures(1, &m_textureId);

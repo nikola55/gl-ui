@@ -9,7 +9,7 @@ namespace gl {
 
 class GlyphAtlas {
 
-    static std::map< ui::uint, ui::shared_ptr<GlyphAtlas> > s_PreloadedBySize;
+    static std::map< ui::uint, ui::shared_ptr<GlyphAtlas> > s_preloadedBySize;
 
 private:
 

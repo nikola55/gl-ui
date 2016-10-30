@@ -20,8 +20,8 @@ int main(int argc, char * argv[]) {
 
     shared_ptr<ListLayout> listLayout = viewFactory->makeListLayout(false);
 
-    listLayout->addChild(viewFactory->makeLabel("Hello", 12));
-//    listLayout->addChild(viewFactory->makeLabel("World", 12));
+    listLayout->addChild(viewFactory->makeLabel("Hello", 15));
+    listLayout->addChild(viewFactory->makeLabel("World", 15));
 
     ui::point p = { 100, 100 };
 
@@ -31,10 +31,10 @@ int main(int argc, char * argv[]) {
 
     shared_ptr<AbsoluteLayout> absLayout = viewFactory->makeAbsoluteLayout();
 
-//    absLayout->addChild(icon);
-//    absLayout->addChild(listLayout);
+    absLayout->addChild(icon);
+    absLayout->addChild(listLayout);
 
-    root->addChild(icon);
+    root->addChild(absLayout);
 
     while(1) {
 

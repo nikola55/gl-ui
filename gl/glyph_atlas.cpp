@@ -1,5 +1,6 @@
 #include "glyph_atlas.h"
 #include <algorithm>
+#include <sstream>
 #include <stdexcept>
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -17,8 +18,6 @@ using ui::point;
 using ui::uint;
 using ui::vec2;
 using ui::shared_ptr;
-
-static FT_Library ftLib;
 
 class FT_Lib {
 public:
@@ -65,11 +64,17 @@ GlyphAtlas::GlyphAtlas(const std::string &font, uint size) : m_TextureId(0) {
 
     m_Width = 0;
     m_Height = 0;
-    for(uint i = 32 ; i < 128 ; i++) {
+    // ASCII and Cyrilic Basic for now
+    for(uint i = 32 ; i < 1280 ; i++) {
+        if(i==128) {
+            i = 1024;
+        }
         if (FT_Load_Char(face, i, FT_LOAD_RENDER)!=0) {
             FT_Done_Face(face);
-            char m[2] = { char(i), 0 };
-            throw runtime_error("cannot load char " + string(m));
+            std::stringstream ss;
+            ss << i;
+            throw runtime_error("cannot load char " + ss.str());
+            continue;
         }
         FT_Bitmap &bitmap = g->bitmap;
         m_Width += bitmap.width+1;
@@ -83,6 +88,7 @@ GlyphAtlas::GlyphAtlas(const std::string &font, uint size) : m_TextureId(0) {
         throw runtime_error("cannot generate texture");
     }
     glBindTexture(GL_TEXTURE_2D, m_TextureId);
+
     glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, GLuint(m_Width), GLuint(m_Height), 0, GL_ALPHA, GL_UNSIGNED_BYTE, 0);
     GLenum err = glGetError();
     if(err != GL_NO_ERROR) {
@@ -100,14 +106,17 @@ GlyphAtlas::GlyphAtlas(const std::string &font, uint size) : m_TextureId(0) {
     float ox = 0;
     float oy = 0;
 
-    for(uint i = 32 ; i < 128 ; i++) {
-
+    for(uint i = 32 ; i < 1280 ; i++) {
+        if(i==128) {
+            i = 1024;
+        }
         if (FT_Load_Char(face, i, FT_LOAD_RENDER)!=0) {
             glDeleteTextures(1, &m_TextureId);
             FT_Done_Face(face);
             m_TextureId = 0;
-            char m[2] = { char(i), 0 };
-            throw runtime_error("cannot load char " + string(m));
+            std::stringstream ss;
+            ss << i;
+            throw runtime_error("cannot load char " + ss.str());
         }
 
         FT_Bitmap &bitmap = g->bitmap;
@@ -117,6 +126,7 @@ GlyphAtlas::GlyphAtlas(const std::string &font, uint size) : m_TextureId(0) {
             (uint)bitmap.width, (uint)bitmap.rows,
             (uint)g->bitmap_left, (uint)g->bitmap_top
         };
+
         vec2<float> loc = {
             ox / m_Width, 0
         };

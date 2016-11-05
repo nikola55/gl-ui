@@ -11,7 +11,7 @@ using ui::RectangleBaseLayout;
 using ui::shared_ptr;
 using ui::uint;
 using ui::point;
-using ui::mat;
+using ui::mat3;
 using ui::eye3x3;
 
 RootLayout_GL::RootLayout_GL(uint width, uint height) : T(3, 3), m_EGLContext(width, height) {
@@ -71,11 +71,11 @@ void RootLayout_GL::draw() {
 
     Drawable_GL &drawable = dynamic_cast<Drawable_GL&>(*m_RootView);
 
-    mat TranslateChild(3,3);
+    mat3 TranslateChild(3,3);
     eye3x3(TranslateChild);
     TranslateChild(0,2) = pos.x;
     TranslateChild(1,2) = pos.y;
-    mat TransformChild = T*TranslateChild;
+    mat3 TransformChild = T*TranslateChild;
 
     drawable.transform(TransformChild);
 

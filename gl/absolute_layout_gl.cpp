@@ -4,18 +4,18 @@
 using gl::Drawable_GL;
 using gl::AbsoluteLayout_GL;
 
-using ui::mat;
+using ui::mat3;
 using ui::uint;
 using ui::point;
 using ui::shared_ptr;
 using ui::eye3x3;
 using ui::trans3x3;
 
-void AbsoluteLayout_GL::transform(mat t) {
+void AbsoluteLayout_GL::transform(mat3 t) {
     T=t;
 }
 
-mat AbsoluteLayout_GL::transform() {
+mat3 AbsoluteLayout_GL::transform() {
     return T;
 }
 
@@ -31,10 +31,10 @@ void AbsoluteLayout_GL::draw() {
             uint w = currChild->width();
             uint h = currChild->height();
 
-            mat Translate(3,3);
+            mat3 Translate(3,3);
             eye3x3(Translate);
             trans3x3(Translate, pos.x, pos.y);
-            mat TransfChld = T*Translate;
+            mat3 TransfChld = T*Translate;
             drawable->transform(TransfChld);
             currChild->draw();
         }

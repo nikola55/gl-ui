@@ -2,7 +2,7 @@
 #include <assert.h>
 
 using ui::Icon;
-using ui::mat;
+using ui::mat3;
 using ui::eye3x3;
 
 using gl::Icon_GL;
@@ -26,11 +26,11 @@ Icon_GL::Icon_GL(const std::string &URI) :
 
 }
 
-mat Icon_GL::transform() {
+mat3 Icon_GL::transform() {
     return m_Transformation;
 }
 
-void Icon_GL::transform(mat transf) {
+void Icon_GL::transform(mat3 transf) {
     m_Transformation = transf;
 }
 
@@ -55,11 +55,11 @@ void Icon_GL::draw() {
     assert(glGetError()==GL_NO_ERROR);
 
     // do scaling
-    mat S(3,3);
+    mat3 S(3,3);
     eye3x3(S);
     S(0,0) = float(width()) / float(m_Texture->width());
     S(1,1) = float(height()) / float(m_Texture->height());
-    mat T = transform();
+    mat3 T = transform();
     m_Transformation = T*S;
 
     GLint transformLocation = m_Shader->uniformLocation("u_T");

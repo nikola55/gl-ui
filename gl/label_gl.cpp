@@ -5,7 +5,7 @@
 
 using ui::Label;
 using ui::uint;
-using ui::mat;
+using ui::mat3;
 using ui::shared_ptr;
 using ui::vec2;
 using ui::point;
@@ -19,31 +19,32 @@ using gl::ShaderProgram;
 using gl::Icon_GL;
 
 using std::string;
+using std::wstring;
 using std::vector;
 
-Label_GL::Label_GL(const string &text, uint size) :
-    m_Transform(3,3),
-    m_Text(text),
-    m_TextSize(size),
-    m_Shader(new ShaderProgram(cs_VShaderSource, cs_FShaderSource)) {
+Label_GL::Label_GL(const wstring &text, uint size) :
+    m_transform(3,3),
+    m_text(text),
+    m_textSize(size),
+    m_shader(new ShaderProgram(cs_VertexShaderSource, cs_FragmentShaderSource)) {
 
     initialize();
 
-    m_Color[0] = 1.0;
-    m_Color[1] = 1.0;
-    m_Color[2] = 1.0;
+    m_color[0] = 1.0;
+    m_color[1] = 1.0;
+    m_color[2] = 1.0;
 
 }
 
 void Label_GL::initialize() {
 
-    m_GlyphAtlas = GlyphAtlas::forSize(m_TextSize);
+    m_glyphAtlas = GlyphAtlas::forSize(m_textSize);
 
-    float atlasWidth = m_GlyphAtlas->width();
-    float atlasHeight = m_GlyphAtlas->height();
+    float atlasWidth = m_glyphAtlas->width();
+    float atlasHeight = m_glyphAtlas->height();
 
-    vector<GLfloat> vertexCoord(m_Text.size()*12);
-    vector<GLfloat> textureCoord(m_Text.size()*12);
+    vector<GLfloat> vertexCoord(m_text.size()*12);
+    vector<GLfloat> textureCoord(m_text.size()*12);
 
     size_t c = 0;
     size_t t = 0;
@@ -51,11 +52,11 @@ void Label_GL::initialize() {
     float cx = 0;
     float cy = 0;
 
-    for(size_t i = 0 ; i < m_Text.size() ; i++) {
+    for(size_t i = 0 ; i < m_text.size() ; i++) {
 
-        char cc = m_Text[i];
-        glyph_info& cg = m_GlyphAtlas->info(cc);
-        vec2< float >& ctc = m_GlyphAtlas->location(cc);
+        wchar_t cc = m_text[i];
+        glyph_info& cg = m_glyphAtlas->info(cc);
+        vec2< float >& ctc = m_glyphAtlas->location(cc);
 
         GLfloat x0 = cx + cg.left;
         GLfloat y0 = cy - cg.height+cg.top;
@@ -86,60 +87,60 @@ void Label_GL::initialize() {
     }
 
     width(cx);
-    height(m_TextSize);
+    height(m_textSize);
 
-    m_VertexBuffer = VertexBuffer< GLfloat >::create( &vertexCoord[0], vertexCoord.size()*sizeof(GLfloat) );
-    m_CoordBuffer = VertexBuffer< GLfloat >::create( &textureCoord[0], textureCoord.size()*sizeof(GLfloat) );
+    m_vertexBuffer = VertexBuffer< GLfloat >::create( &vertexCoord[0], vertexCoord.size()*sizeof(GLfloat) );
+    m_coordBuffer = VertexBuffer< GLfloat >::create( &textureCoord[0], textureCoord.size()*sizeof(GLfloat) );
 
 }
 
 void Label_GL::draw() {
 
-    assert(m_Shader->compiled());
-    m_Shader->enable();
+    assert(m_shader->compiled());
+    m_shader->enable();
     assert(glGetError()==GL_NO_ERROR);
 
-    assert(m_CoordBuffer->created());
-    glBindBuffer(GL_ARRAY_BUFFER, m_CoordBuffer->getId());
-    GLint coordLoc = m_Shader->attributeLocation("a_coord");
+    assert(m_coordBuffer->created());
+    glBindBuffer(GL_ARRAY_BUFFER, m_coordBuffer->getId());
+    GLint coordLoc = m_shader->attributeLocation("a_coord");
     assert(coordLoc != -1);
     glVertexAttribPointer(coordLoc, 2, GL_FLOAT, 0, 0, 0);
     glEnableVertexAttribArray(coordLoc);
     assert(glGetError()==GL_NO_ERROR);
 
-    assert(m_VertexBuffer->created());
-    glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer->getId());
-    GLint vertLoc = m_Shader->attributeLocation("a_pos");
+    assert(m_vertexBuffer->created());
+    glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer->getId());
+    GLint vertLoc = m_shader->attributeLocation("a_pos");
     assert(vertLoc != -1);
     glVertexAttribPointer(vertLoc, 2, GL_FLOAT, 0, 0, 0);
     glEnableVertexAttribArray(vertLoc);
     assert(glGetError()==GL_NO_ERROR);
 
-    GLint TLoc = m_Shader->uniformLocation("u_T");
+    GLint TLoc = m_shader->uniformLocation("u_T");
     assert(TLoc != -1);
-    glUniformMatrix3fv(TLoc, 1, GL_FALSE, &m_Transform(0,0));
+    glUniformMatrix3fv(TLoc, 1, GL_FALSE, &m_transform(0,0));
     assert(glGetError()==GL_NO_ERROR);
 
-    GLint colorLoc = m_Shader->uniformLocation("u_color");
+    GLint colorLoc = m_shader->uniformLocation("u_color");
     assert(colorLoc != -1);
-    glUniform3f(colorLoc, m_Color[0], m_Color[1], m_Color[2]);
+    glUniform3f(colorLoc, m_color[0], m_color[1], m_color[2]);
     assert(glGetError() == GL_NO_ERROR);
 
-    assert(m_GlyphAtlas->loaded());
-    GLint texLoc = m_Shader->uniformLocation("u_glyphs");
+    assert(m_glyphAtlas->loaded());
+    GLint texLoc = m_shader->uniformLocation("u_glyphs");
     assert(texLoc != -1);
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, m_GlyphAtlas->textureId());
+    glBindTexture(GL_TEXTURE_2D, m_glyphAtlas->textureId());
     glUniform1i(texLoc, 0);
     assert(glGetError()==GL_NO_ERROR);
 
-    glDrawArrays(GL_TRIANGLES, 0, (m_Text.size())*6);
+    glDrawArrays(GL_TRIANGLES, 0, (m_text.size())*6);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     assert(glGetError()==GL_NO_ERROR);
 
 }
 
-const string Label_GL::cs_VShaderSource =
+const string Label_GL::cs_VertexShaderSource =
         "precision mediump float;\n"
         "attribute vec2 a_pos;\n"
         "attribute vec2 a_coord;\n"
@@ -150,7 +151,7 @@ const string Label_GL::cs_VShaderSource =
         "   v_coord = a_coord;\n"
         "}\n";
 
-const string Label_GL::cs_FShaderSource =
+const string Label_GL::cs_FragmentShaderSource =
         "precision mediump float;\n"
         "varying vec2 v_coord;\n"
         "uniform vec3 u_color;\n"

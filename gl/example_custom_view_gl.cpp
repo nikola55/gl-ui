@@ -8,13 +8,14 @@ using gl::Label_GL;
 using ui::View;
 using ui::shared_ptr;
 using ui::uint;
-using ui::mat;
+using ui::mat3;
 
 using std::string;
+using std::wstring;
 
 ExampleCustomView_GL::ExampleCustomView_GL(
         const string &iconURI,
-        const string text,
+        const wstring text,
         uint textSize,
         TextPosition textPos) :
     m_Transform(3,3),
@@ -27,14 +28,14 @@ ExampleCustomView_GL::ExampleCustomView_GL(
 
 void ExampleCustomView_GL::draw() {
 
-    mat T = transform();
+    mat3 T = transform();
 
     m_Icon->transform(T);
 
-    mat TransLabel(3,3);
+    mat3 TransLabel(3,3);
     ui::eye3x3(TransLabel);
     ui::trans3x3(TransLabel, m_Icon->width(), m_Icon->height()/2.0 - m_Label->height()/2);
-    mat TLabel = T*TransLabel;
+    mat3 TLabel = T*TransLabel;
     m_Label->transform(TLabel);
 
     m_Label->draw();

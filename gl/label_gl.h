@@ -13,33 +13,33 @@ class Label_GL : public ui::Label, public Drawable_GL {
 
 public:
 
-    Label_GL(const std::string &text, ui::uint size);
+    Label_GL(const std::wstring &text, ui::uint size);
 
-    const std::string& text() const { return m_Text; }
+    const std::wstring& text() const { return m_text; }
 
-    void text(const std::string &text) {
-        m_Text = text;
+    void text(const std::wstring &text) {
+        m_text = text;
         initialize();
     }
 
-    ui::uint size() const { return m_TextSize; }
+    ui::uint size() const { return m_textSize; }
 
     void size(ui::uint s) {
-        m_TextSize = s;
+        m_textSize = s;
         initialize();
     }
 
-    void transform(ui::mat T) {
-        m_Transform = T;
+    void transform(ui::mat3 T) {
+        m_transform = T;
     }
 
-    void color(ui::byte r, ui::byte g, ui::byte b) {
-        m_Color[0] = r/255.f;
-        m_Color[1] = g/255.f;
-        m_Color[2] = b/255.f;
+    void text_color(ui::byte r, ui::byte g, ui::byte b) {
+        m_color[0] = r/255.f;
+        m_color[1] = g/255.f;
+        m_color[2] = b/255.f;
     }
 
-    ui::mat transform() { return m_Transform; }
+    ui::mat3 transform() { return m_transform; }
 
     void draw();
 
@@ -49,18 +49,18 @@ protected:
 
 private:
 
-    ui::mat m_Transform;
-    std::string m_Text;
-    ui::uint m_TextSize;
-    ui::shared_ptr< ShaderProgram > m_Shader;
-    ui::shared_ptr< VertexBuffer<GLfloat> > m_VertexBuffer;
-    ui::shared_ptr< VertexBuffer<GLfloat> > m_CoordBuffer;
-    ui::shared_ptr< GlyphAtlas > m_GlyphAtlas;
+    ui::mat3 m_transform;
+    std::wstring m_text;
+    ui::uint m_textSize;
+    ui::shared_ptr< ShaderProgram > m_shader;
+    ui::shared_ptr< VertexBuffer<GLfloat> > m_vertexBuffer;
+    ui::shared_ptr< VertexBuffer<GLfloat> > m_coordBuffer;
+    ui::shared_ptr< GlyphAtlas > m_glyphAtlas;
 
-    float m_Color[3];
+    float m_color[3];
 
-    static const std::string cs_VShaderSource;
-    static const std::string cs_FShaderSource;
+    static const std::string cs_VertexShaderSource;
+    static const std::string cs_FragmentShaderSource;
 
 };
 

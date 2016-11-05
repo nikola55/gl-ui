@@ -11,14 +11,14 @@ public:
 
     AbsoluteLayout_GL() : T(3,3) { }
 
-    void transform(ui::mat);
+    void transform(ui::mat3);
 
-    ui::mat transform();
+    ui::mat3 transform();
 
     void draw();
 
 private:
-    ui::mat T;
+    ui::mat3 T;
 };
 
 }

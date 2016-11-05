@@ -7,18 +7,18 @@ using ui::ListLayout;
 using ui::shared_ptr;
 using ui::uint;
 using ui::point;
-using ui::mat;
+using ui::mat3;
 using ui::eye3x3;
 
 ListLayout_GL::ListLayout_GL(bool horizontal) : ListLayout(horizontal), T(3,3) {
     eye3x3(T);
 }
 
-void ListLayout_GL::transform(mat t) {
+void ListLayout_GL::transform(mat3 t) {
     T = t;
 }
 
-mat ListLayout_GL::transform() {
+mat3 ListLayout_GL::transform() {
     return T;
 }
 
@@ -51,11 +51,11 @@ void ListLayout_GL::draw() {
                 }
                 offset += padding() + cv->height();
             }
-            mat Translate(3,3);
+            mat3 Translate(3,3);
             eye3x3(Translate);
             Translate(0,2)=tx;
             Translate(1,2)=ty;
-            mat Transform = T*Translate;
+            mat3 Transform = T*Translate;
             cv->width(cvWidth);
             cv->height(cvHeight);
             cd->transform(Transform);

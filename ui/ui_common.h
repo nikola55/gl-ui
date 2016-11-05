@@ -100,8 +100,8 @@ public:
         if (--m_ref_count[0] == 0) {
             if(m_freeData) {
                 delete []m_data;
-                delete m_ref_count;
             }
+            delete m_ref_count;
         }
     }
 
@@ -114,8 +114,8 @@ public:
         if (--m_ref_count[0] == 0) {
             if(m_freeData) {
                 delete []m_data;
-                delete m_ref_count;
             }
+            delete m_ref_count;
         }
         m_width = x.m_width;
         m_height = x.m_height;
@@ -176,32 +176,32 @@ template < class _Type > struct vec2 {
     _Type y;
 };
 
-typedef grid<float> mat;
+typedef grid<float> mat3;
 
 typedef vec2<uint> point;
 
-inline void eye3x3(mat &m) {
+inline void eye3x3(mat3 &m) {
     m(0,0) = 1.0f; m(0,1) = 0.0f; m(0,2) = 0.0f;
     m(1,0) = 0.0f; m(1,1) = 1.0f; m(1,2) = 0.0f;
     m(2,0) = 0.0f; m(2,1) = 0.0f; m(2,2) = 1.0f;
 }
 
-inline mat eye3x3() {
-    mat eye(3,3);
+inline mat3 eye3x3() {
+    mat3 eye(3,3);
     eye3x3(eye);
     return eye;
 }
 
-inline void trans3x3(mat &m, float x, float y) {
+inline void trans3x3(mat3 &m, float x, float y) {
     m(0, 2) = x;
     m(1, 2) = y;
 }
 
-inline mat operator*(const mat &A, const mat &B) {
+inline mat3 operator*(const mat3 &A, const mat3 &B) {
     bool allowed = A.width() == 3 && A.height() == 3 &&
             B.width() == 3 && B.height() == 3;
     if(allowed) {
-        mat C(3,3);
+        mat3 C(3,3);
         C(0,0) = A(0,0)*B(0,0) + A(0,1)*B(1,0) + A(0,2)*B(2,0);
         C(0,1) = A(0,0)*B(0,1) + A(0,1)*B(1,1) + A(0,2)*B(2,1);
         C(0,2) = A(0,0)*B(0,2) + A(0,1)*B(1,2) + A(0,2)*B(2,2);
@@ -215,10 +215,10 @@ inline mat operator*(const mat &A, const mat &B) {
         C(2,2) = A(2,0)*B(0,2) + A(2,1)*B(1,2) + A(2,2)*B(2,2);
         return C;
     }
-    return mat(1,1);
+    return mat3(1,1);
 }
 
-inline std::ostream& operator<<(std::ostream &os, const mat &m) {
+inline std::ostream& operator<<(std::ostream &os, const mat3 &m) {
     os << m(0,0) << ", " << m(0,1) << ", " << m(0,2) << std::endl;
     os << m(1,0) << ", " << m(1,1) << ", " << m(1,2) << std::endl;
     os << m(2,0) << ", " << m(2,1) << ", " << m(2,2) << std::endl;

@@ -8,7 +8,7 @@ namespace gl {
 class ViewFactory_GL : public ui::ViewFactory {
 public:
 
-    ui::shared_ptr<ui::Label> makeLabel(const std::string &text, ui::uint sz);
+    ui::shared_ptr<ui::Label> makeLabel(const std::wstring &text, ui::uint sz);
 
     ui::shared_ptr<ui::Icon> makeIcon(const std::string &URI);
 

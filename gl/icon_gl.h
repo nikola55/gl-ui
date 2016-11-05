@@ -16,13 +16,13 @@ public:
 
     void draw();
 
-    void transform(ui::mat);
+    void transform(ui::mat3);
 
-    ui::mat transform();
+    ui::mat3 transform();
 
 private:
 
-    ui::mat m_Transformation;
+    ui::mat3 m_Transformation;
     ui::shared_ptr<Texture> m_Texture;
 
     ui::shared_ptr< VertexBuffer<GLfloat> > m_Coord;

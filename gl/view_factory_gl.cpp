@@ -5,6 +5,7 @@
 #include "absolute_layout_gl.h"
 
 using std::string;
+using std::wstring;
 
 using ui::ViewFactory;
 using ui::Label;
@@ -21,7 +22,7 @@ using gl::Icon_GL;
 using gl::ListLayout_GL;
 using gl::AbsoluteLayout_GL;
 
-shared_ptr<Label> ViewFactory_GL::makeLabel(const string &text, uint sz) {
+shared_ptr<Label> ViewFactory_GL::makeLabel(const wstring &text, uint sz) {
     return new Label_GL(text, sz);
 }
 

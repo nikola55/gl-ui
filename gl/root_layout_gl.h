@@ -23,7 +23,7 @@ public:
     static ui::shared_ptr<RootLayout_GL> create(uint w, uint h);
 
 private:
-    ui::mat T;
+    ui::mat3 T;
     ui::shared_ptr<ui::View> m_RootView;
     Context_EGL m_EGLContext;
 };

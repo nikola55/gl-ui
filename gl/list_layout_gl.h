@@ -13,12 +13,12 @@ public:
 
     void draw();
 
-    void transform(ui::mat);
+    void transform(ui::mat3);
 
-    ui::mat transform();
+    ui::mat3 transform();
 
 private:
-    ui::mat T;
+    ui::mat3 T;
 };
 
 }

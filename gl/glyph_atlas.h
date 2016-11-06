@@ -24,8 +24,8 @@ public:
     ~GlyphAtlas();
 
     ui::glyph_info& info(ui::uint ch) {
-        std::map< ui::uint, std::pair< ui::glyph_info, ui::vec2< float > > >::iterator glyphInfo = m_GlyphInfo.find(ch);
-        if(glyphInfo != m_GlyphInfo.end()) {
+        std::map< ui::uint, std::pair< ui::glyph_info, ui::vec2< float > > >::iterator glyphInfo = m_glyphInfo.find(ch);
+        if(glyphInfo != m_glyphInfo.end()) {
             return glyphInfo->second.first;
         } else {
             static ui::glyph_info defaultInfo(ui::point(), 0, 0, 0, 0);
@@ -34,8 +34,8 @@ public:
     }
 
     ui::vec2<float>& location(ui::uint ch) {
-        std::map< ui::uint, std::pair< ui::glyph_info, ui::vec2< float > > >::iterator glyphInfo = m_GlyphInfo.find(ch);
-        if(glyphInfo != m_GlyphInfo.end()) {
+        std::map< ui::uint, std::pair< ui::glyph_info, ui::vec2< float > > >::iterator glyphInfo = m_glyphInfo.find(ch);
+        if(glyphInfo != m_glyphInfo.end()) {
             return glyphInfo->second.second;
         } else {
             static ui::vec2<float> defaultLocation = {0,0};
@@ -44,24 +44,24 @@ public:
     }
 
     GLuint textureId() {
-        return m_TextureId;
+        return m_textureId;
     }
 
     bool loaded() const {
-        return m_TextureId != 0;
+        return m_textureId != 0;
     }
 
-    float width() const { return m_Width; }
+    float width() const { return m_width; }
 
-    float height() const { return m_Height; }
+    float height() const { return m_height; }
 
     static ui::shared_ptr< GlyphAtlas > forSize(ui::uint sz);
 
 private:
-    std::map< ui::uint, std::pair< ui::glyph_info, ui::vec2< float > > > m_GlyphInfo;
-    float m_Width;
-    float m_Height;
-    GLuint m_TextureId;
+    std::map< ui::uint, std::pair< ui::glyph_info, ui::vec2< float > > > m_glyphInfo;
+    float m_width;
+    float m_height;
+    GLuint m_textureId;
 
 };
 

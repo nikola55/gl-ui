@@ -49,7 +49,7 @@ private:
 
 static FT_Lib gs_FTLib;
 
-GlyphAtlas::GlyphAtlas(const std::string &font, uint size) : m_TextureId(0) {
+GlyphAtlas::GlyphAtlas(const std::string &font, uint size) : m_textureId(0) {
 
     if(!gs_FTLib.ok()) {
         throw runtime_error("cannot initialize freetype");
@@ -62,8 +62,8 @@ GlyphAtlas::GlyphAtlas(const std::string &font, uint size) : m_TextureId(0) {
     FT_Set_Pixel_Sizes(face, 0, size);
     FT_GlyphSlot g = face->glyph;
 
-    m_Width = 0;
-    m_Height = 0;
+    m_width = 0;
+    m_height = 0;
     // ASCII and Cyrilic Basic for now
     for(uint i = 32 ; i < 1280 ; i++) {
         if(i==128) {
@@ -77,24 +77,24 @@ GlyphAtlas::GlyphAtlas(const std::string &font, uint size) : m_TextureId(0) {
             continue;
         }
         FT_Bitmap &bitmap = g->bitmap;
-        m_Width += bitmap.width+1;
-        m_Height = std::max(m_Height, float(g->bitmap.rows));
+        m_width += bitmap.width+1;
+        m_height = std::max(m_height, float(g->bitmap.rows));
     }
 
-    glGenTextures(1, &m_TextureId);
+    glGenTextures(1, &m_textureId);
     if(glGetError() != GL_NO_ERROR) {
         FT_Done_Face(face);
-        m_TextureId = 0;
+        m_textureId = 0;
         throw runtime_error("cannot generate texture");
     }
-    glBindTexture(GL_TEXTURE_2D, m_TextureId);
+    glBindTexture(GL_TEXTURE_2D, m_textureId);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, GLuint(m_Width), GLuint(m_Height), 0, GL_ALPHA, GL_UNSIGNED_BYTE, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, GLuint(m_width), GLuint(m_height), 0, GL_ALPHA, GL_UNSIGNED_BYTE, 0);
     GLenum err = glGetError();
     if(err != GL_NO_ERROR) {
-        glDeleteTextures(1, &m_TextureId);
+        glDeleteTextures(1, &m_textureId);
         FT_Done_Face(face);
-        m_TextureId = 0;
+        m_textureId = 0;
         throw runtime_error("cannot create texture");
     }
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -111,9 +111,9 @@ GlyphAtlas::GlyphAtlas(const std::string &font, uint size) : m_TextureId(0) {
             i = 1024;
         }
         if (FT_Load_Char(face, i, FT_LOAD_RENDER)!=0) {
-            glDeleteTextures(1, &m_TextureId);
+            glDeleteTextures(1, &m_textureId);
             FT_Done_Face(face);
-            m_TextureId = 0;
+            m_textureId = 0;
             std::stringstream ss;
             ss << i;
             throw runtime_error("cannot load char " + ss.str());
@@ -128,13 +128,13 @@ GlyphAtlas::GlyphAtlas(const std::string &font, uint size) : m_TextureId(0) {
         };
 
         vec2<float> loc = {
-            ox / m_Width, 0
+            ox / m_width, 0
         };
 
         glTexSubImage2D(GL_TEXTURE_2D, 0, ox, oy, gy.width, gy.height, GL_ALPHA, GL_UNSIGNED_BYTE, bitmap.buffer);
 
         typedef pair< uint, pair< glyph_info, vec2< float > > > pair_type;
-        m_GlyphInfo.insert(pair_type(i, pair< glyph_info, vec2<float> >(gy,loc)));
+        m_glyphInfo.insert(pair_type(i, pair< glyph_info, vec2<float> >(gy,loc)));
 
         ox+= bitmap.width+1;
 
@@ -159,6 +159,6 @@ shared_ptr< GlyphAtlas > GlyphAtlas::forSize(uint sz) {
 
 GlyphAtlas::~GlyphAtlas() {
     if(loaded()) {
-        glDeleteTextures(1, &m_TextureId);
+        glDeleteTextures(1, &m_textureId);
     }
 }

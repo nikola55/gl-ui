@@ -10,10 +10,12 @@ void ui::ListLayout::addChild(shared_ptr<View> chld) {
 
 void ui::ListLayout::removeChild(shared_ptr<View> chld) {
     typedef std::list<shared_ptr<View> >::iterator ViewIter;
-    for(ViewIter i = m_children.begin() ; i != m_children.end() ; i++) {
+    for(ViewIter i = m_children.begin() ; i != m_children.end() ;) {
         const View *v = *i;
         if(v == chld) {
             i = m_children.erase(i);
+        } else {
+            i++;
         }
     }
 }

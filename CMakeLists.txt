@@ -11,5 +11,5 @@ add_subdirectory(ui)
 
 add_definitions(-std=c++03)
 
-add_executable(${PROJECT_NAME} main.cpp)
+add_executable(${PROJECT_NAME} main.cpp channel_view.cpp)
 target_link_libraries(${PROJECT_NAME} ui native gl)

@@ -13,7 +13,6 @@ using gl::ShaderProgram;
 
 Icon_GL::Icon_GL(const std::string &URI) :
     Icon(URI),
-    m_Transformation(3,3),
     m_Texture(new Texture(URI)),
     m_Coord(VertexBuffer<GLfloat>::getRect3(m_Texture->width(), m_Texture->height())),
     m_TexCoord(VertexBuffer<GLfloat>::getSquareTexCoord()),
@@ -55,7 +54,7 @@ void Icon_GL::draw() {
     assert(glGetError()==GL_NO_ERROR);
 
     // do scaling
-    mat3 S(3,3);
+    mat3 S;
     eye3x3(S);
     S(0,0) = float(width()) / float(m_Texture->width());
     S(1,1) = float(height()) / float(m_Texture->height());

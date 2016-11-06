@@ -176,7 +176,16 @@ template < class _Type > struct vec2 {
     _Type y;
 };
 
-typedef grid<float> mat3;
+class mat3 {
+    float data[9];
+public:
+    float& operator()(unsigned i, unsigned j) {
+        return data[3*j+i];
+    }
+    const float& operator()(unsigned i, unsigned j) const {
+        return data[3*j+i];
+    }
+};
 
 typedef vec2<uint> point;
 
@@ -187,7 +196,7 @@ inline void eye3x3(mat3 &m) {
 }
 
 inline mat3 eye3x3() {
-    mat3 eye(3,3);
+    mat3 eye;
     eye3x3(eye);
     return eye;
 }
@@ -198,24 +207,21 @@ inline void trans3x3(mat3 &m, float x, float y) {
 }
 
 inline mat3 operator*(const mat3 &A, const mat3 &B) {
-    bool allowed = A.width() == 3 && A.height() == 3 &&
-            B.width() == 3 && B.height() == 3;
-    if(allowed) {
-        mat3 C(3,3);
-        C(0,0) = A(0,0)*B(0,0) + A(0,1)*B(1,0) + A(0,2)*B(2,0);
-        C(0,1) = A(0,0)*B(0,1) + A(0,1)*B(1,1) + A(0,2)*B(2,1);
-        C(0,2) = A(0,0)*B(0,2) + A(0,1)*B(1,2) + A(0,2)*B(2,2);
 
-        C(1,0) = A(1,0)*B(0,0) + A(1,1)*B(1,0) + A(1,2)*B(2,0);
-        C(1,1) = A(1,0)*B(0,1) + A(1,1)*B(1,1) + A(1,2)*B(2,1);
-        C(1,2) = A(1,0)*B(0,2) + A(1,1)*B(1,2) + A(1,2)*B(2,2);
+    mat3 C;
+    C(0,0) = A(0,0)*B(0,0) + A(0,1)*B(1,0) + A(0,2)*B(2,0);
+    C(0,1) = A(0,0)*B(0,1) + A(0,1)*B(1,1) + A(0,2)*B(2,1);
+    C(0,2) = A(0,0)*B(0,2) + A(0,1)*B(1,2) + A(0,2)*B(2,2);
 
-        C(2,0) = A(2,0)*B(0,0) + A(2,1)*B(1,0) + A(2,2)*B(2,0);
-        C(2,1) = A(2,0)*B(0,1) + A(2,1)*B(1,1) + A(2,2)*B(2,1);
-        C(2,2) = A(2,0)*B(0,2) + A(2,1)*B(1,2) + A(2,2)*B(2,2);
-        return C;
-    }
-    return mat3(1,1);
+    C(1,0) = A(1,0)*B(0,0) + A(1,1)*B(1,0) + A(1,2)*B(2,0);
+    C(1,1) = A(1,0)*B(0,1) + A(1,1)*B(1,1) + A(1,2)*B(2,1);
+    C(1,2) = A(1,0)*B(0,2) + A(1,1)*B(1,2) + A(1,2)*B(2,2);
+
+    C(2,0) = A(2,0)*B(0,0) + A(2,1)*B(1,0) + A(2,2)*B(2,0);
+    C(2,1) = A(2,0)*B(0,1) + A(2,1)*B(1,1) + A(2,2)*B(2,1);
+    C(2,2) = A(2,0)*B(0,2) + A(2,1)*B(1,2) + A(2,2)*B(2,2);
+    return C;
+
 }
 
 inline std::ostream& operator<<(std::ostream &os, const mat3 &m) {

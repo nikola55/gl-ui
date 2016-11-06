@@ -31,7 +31,7 @@ void AbsoluteLayout_GL::draw() {
             uint w = currChild->width();
             uint h = currChild->height();
 
-            mat3 Translate(3,3);
+            mat3 Translate;
             eye3x3(Translate);
             trans3x3(Translate, pos.x, pos.y);
             mat3 TransfChld = T*Translate;

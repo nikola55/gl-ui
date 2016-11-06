@@ -10,7 +10,7 @@ using ui::point;
 using ui::mat3;
 using ui::eye3x3;
 
-ListLayout_GL::ListLayout_GL(bool horizontal) : ListLayout(horizontal), T(3,3) {
+ListLayout_GL::ListLayout_GL(bool horizontal) : ListLayout(horizontal) {
     eye3x3(T);
 }
 
@@ -51,7 +51,7 @@ void ListLayout_GL::draw() {
                 }
                 offset += padding() + cv->height();
             }
-            mat3 Translate(3,3);
+            mat3 Translate;
             eye3x3(Translate);
             Translate(0,2)=tx;
             Translate(1,2)=ty;

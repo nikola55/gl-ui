@@ -23,7 +23,6 @@ using std::wstring;
 using std::vector;
 
 Label_GL::Label_GL(const wstring &text, uint size) :
-    m_transform(3,3),
     m_text(text),
     m_textSize(size),
     m_shader(new ShaderProgram(cs_VertexShaderSource, cs_FragmentShaderSource)) {

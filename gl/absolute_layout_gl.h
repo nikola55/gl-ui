@@ -9,7 +9,7 @@ namespace gl {
 class AbsoluteLayout_GL : public ui::AbsoluteLayout, public Drawable_GL {
 public:
 
-    AbsoluteLayout_GL() : T(3,3) { }
+    AbsoluteLayout_GL() { }
 
     void transform(ui::mat3);
 

@@ -3,6 +3,8 @@
 #include <sstream>
 #include <stdexcept>
 #include <ft2build.h>
+#include <cassert>
+
 #include FT_FREETYPE_H
 
 using std::runtime_error;
@@ -49,6 +51,9 @@ private:
 
 static FT_Lib gs_FTLib;
 
+#define MAX_GLYPH_ATLAS_WIDTH  2048
+#define MAX_GLYPH_ATLAS_HEIGHT 2048
+
 GlyphAtlas::GlyphAtlas(const std::string &font, uint size) : m_textureId(0) {
 
     if(!gs_FTLib.ok()) {
@@ -64,6 +69,8 @@ GlyphAtlas::GlyphAtlas(const std::string &font, uint size) : m_textureId(0) {
 
     m_width = 0;
     m_height = 0;
+    GLuint roww = 0;
+    GLuint rowh = 0;
     // ASCII and Cyrilic Basic for now
     for(uint i = 32 ; i < 1280 ; i++) {
         if(i==128) {
@@ -77,9 +84,18 @@ GlyphAtlas::GlyphAtlas(const std::string &font, uint size) : m_textureId(0) {
             continue;
         }
         FT_Bitmap &bitmap = g->bitmap;
-        m_width += bitmap.width+1;
-        m_height = std::max(m_height, float(g->bitmap.rows));
+        if(roww + bitmap.width+1 > MAX_GLYPH_ATLAS_WIDTH) {
+            m_width = std::max(roww, m_width);
+            m_height += rowh;
+            roww = 0;
+            rowh = 0;
+        }
+        roww += bitmap.width+1;
+        rowh = std::max(rowh, GLuint(g->bitmap.rows));
     }
+
+    m_width = std::max(roww, m_width);
+    m_height += rowh + 1;
 
     glGenTextures(1, &m_textureId);
     if(glGetError() != GL_NO_ERROR) {
@@ -103,9 +119,9 @@ GlyphAtlas::GlyphAtlas(const std::string &font, uint size) : m_textureId(0) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    float ox = 0;
-    float oy = 0;
-
+    GLuint oy = 0, ox = 0;
+    roww = 0;
+    rowh = 0;
     for(uint i = 32 ; i < 1280 ; i++) {
         if(i==128) {
             i = 1024;
@@ -127,8 +143,13 @@ GlyphAtlas::GlyphAtlas(const std::string &font, uint size) : m_textureId(0) {
             (uint)g->bitmap_left, (uint)g->bitmap_top
         };
 
+        if(ox + bitmap.width + 1 > MAX_GLYPH_ATLAS_WIDTH) {
+            oy += rowh;
+            rowh = 0;
+            ox = 0;
+        }
         vec2<float> loc = {
-            ox / m_width, 0
+            float(ox) / m_width, float(oy) / m_height
         };
 
         glTexSubImage2D(GL_TEXTURE_2D, 0, ox, oy, gy.width, gy.height, GL_ALPHA, GL_UNSIGNED_BYTE, bitmap.buffer);
@@ -136,12 +157,15 @@ GlyphAtlas::GlyphAtlas(const std::string &font, uint size) : m_textureId(0) {
         typedef pair< uint, pair< glyph_info, vec2< float > > > pair_type;
         m_glyphInfo.insert(pair_type(i, pair< glyph_info, vec2<float> >(gy,loc)));
 
-        ox+= bitmap.width+1;
+        rowh = std::max(rowh, GLuint(bitmap.rows));
+        ox += bitmap.width + 1;
 
     }
 
     FT_Done_Face(face);
 }
+
+#define FONT_LOCATION "/home/nikola/Qt_Creator_Projects/UI/res/FreeSans.ttf"
 
 map<uint, shared_ptr<GlyphAtlas> > GlyphAtlas::s_preloadedBySize;
 
@@ -149,7 +173,7 @@ shared_ptr< GlyphAtlas > GlyphAtlas::forSize(uint sz) {
     map<uint, shared_ptr<GlyphAtlas> >::iterator iter = s_preloadedBySize.find(sz);
     if(iter == s_preloadedBySize.end()) {
         // unhardcode
-        shared_ptr<GlyphAtlas> atlas = new GlyphAtlas("/home/nikola/Qt_Creator_Projects/UI/res/FreeSans.ttf", sz);
+        shared_ptr<GlyphAtlas> atlas = new GlyphAtlas(FONT_LOCATION, sz);
         pair<uint, shared_ptr<GlyphAtlas> > insert(sz, atlas);
         pair<map<uint, shared_ptr<GlyphAtlas> >::iterator,bool> res = s_preloadedBySize.insert(insert);
         iter = res.first;

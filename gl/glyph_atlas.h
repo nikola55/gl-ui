@@ -59,8 +59,8 @@ public:
 
 private:
     std::map< ui::uint, std::pair< ui::glyph_info, ui::vec2< float > > > m_glyphInfo;
-    float m_width;
-    float m_height;
+    GLuint m_width;
+    GLuint m_height;
     GLuint m_textureId;
 
 };

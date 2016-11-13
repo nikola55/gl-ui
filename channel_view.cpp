@@ -8,6 +8,8 @@ using gl::Icon_GL;
 
 ui::shared_ptr<gl::Icon_GL> ChannelView::s_background;
 
+#define CHBG_LOC "/home/nikola/Desktop/bg_grad.png"
+
 ChannelView::ChannelView(const std::wstring &title, const std::wstring &epg, const std::string &iconPath) {
 
     m_channelIcon = new Icon_GL(iconPath);
@@ -26,7 +28,7 @@ ChannelView::ChannelView(const std::wstring &title, const std::wstring &epg, con
     m_title->position(titlePos);
 
     if(s_background == 0) {
-        s_background = new Icon_GL("/home/nikola/Desktop/bg_grad.png");
+        s_background = new Icon_GL(CHBG_LOC);
     }
 
     width(s_background->width());

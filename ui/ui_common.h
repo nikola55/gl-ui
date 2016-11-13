@@ -71,7 +71,7 @@ protected:
         m_height(height),
         m_data(data),
         m_ref_count(new unsigned(1)),
-        m_freeData(freeData) {
+        m_free_data(freeData) {
 
     }
 public:
@@ -81,7 +81,7 @@ public:
         m_height(height),
         m_ref_count(new unsigned(1)),
         m_data(new _Type[m_width*m_height]),
-        m_freeData(true) {
+        m_free_data(true) {
 
     }
 
@@ -90,7 +90,7 @@ public:
         m_height(x.m_height),
         m_ref_count(x.m_ref_count),
         m_data(x.m_data),
-        m_freeData(x.m_freeData) {
+        m_free_data(x.m_free_data) {
 
         m_ref_count[0]++;
 
@@ -98,7 +98,7 @@ public:
 
     virtual ~grid() {
         if (--m_ref_count[0] == 0) {
-            if(m_freeData) {
+            if(m_free_data) {
                 delete []m_data;
             }
             delete m_ref_count;
@@ -112,7 +112,7 @@ public:
     grid& operator=(const grid &x) {
         x.m_ref_count[0]++;
         if (--m_ref_count[0] == 0) {
-            if(m_freeData) {
+            if(m_free_data) {
                 delete []m_data;
             }
             delete m_ref_count;
@@ -121,7 +121,7 @@ public:
         m_height = x.m_height;
         m_ref_count = x.m_ref_count;
         m_data = x.m_data;
-        m_freeData = x.m_freeData;
+        m_free_data = x.m_free_data;
         return *this;
     }
 
@@ -142,7 +142,7 @@ private:
     unsigned m_height;
     unsigned *m_ref_count;
     _Type * m_data;
-    bool m_freeData;
+    bool m_free_data;
 };
 
 class image : public grid<byte> {
@@ -227,7 +227,7 @@ inline mat3 operator*(const mat3 &A, const mat3 &B) {
 inline std::ostream& operator<<(std::ostream &os, const mat3 &m) {
     os << m(0,0) << ", " << m(0,1) << ", " << m(0,2) << std::endl;
     os << m(1,0) << ", " << m(1,1) << ", " << m(1,2) << std::endl;
-    os << m(2,0) << ", " << m(2,1) << ", " << m(2,2) << std::endl;
+    os << m(2,0) << ", " << m(2,1) << ", " << m(2,2);
     return os;
 }
 

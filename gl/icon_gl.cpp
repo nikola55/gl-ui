@@ -13,42 +13,42 @@ using gl::ShaderProgram;
 
 Icon_GL::Icon_GL(const std::string &URI) :
     Icon(URI),
-    m_Texture(new Texture(URI)),
-    m_Coord(VertexBuffer<GLfloat>::getRect3(m_Texture->width(), m_Texture->height())),
-    m_TexCoord(VertexBuffer<GLfloat>::getSquareTexCoord()),
-    m_Shader(new ShaderProgram(sc_VertexShader, sc_FragShader)) {
+    m_texture(new Texture(URI)),
+    m_coord(VertexBuffer<GLfloat>::getRect3(m_texture->width(), m_texture->height())),
+    m_texCoord(VertexBuffer<GLfloat>::getSquareTexCoord()),
+    m_shader(new ShaderProgram(sc_VertexShader, sc_FragShader)) {
 
-    ui::eye3x3(m_Transformation);
+    ui::eye3x3(m_transf);
 
-    width(m_Texture->width());
-    height(m_Texture->height());
+    width(m_texture->width());
+    height(m_texture->height());
 
 }
 
 mat3 Icon_GL::transform() {
-    return m_Transformation;
+    return m_transf;
 }
 
 void Icon_GL::transform(mat3 transf) {
-    m_Transformation = transf;
+    m_transf = transf;
 }
 
 void Icon_GL::draw() {
 
-    assert(m_Shader->compiled());
-    m_Shader->enable();
+    assert(m_shader->compiled());
+    m_shader->enable();
     assert(glGetError() == GL_NO_ERROR);
 
-    assert(m_TexCoord->created());
-    glBindBuffer(GL_ARRAY_BUFFER, m_TexCoord->getId());
-    GLint coordLocation = m_Shader->attributeLocation("a_coord");
+    assert(m_texCoord->created());
+    glBindBuffer(GL_ARRAY_BUFFER, m_texCoord->getId());
+    GLint coordLocation = m_shader->attributeLocation("a_coord");
     glVertexAttribPointer(coordLocation, 2, GL_FLOAT, 0, 8, 0);
     glEnableVertexAttribArray(coordLocation);
     assert(glGetError()==GL_NO_ERROR);
 
-    assert(m_Coord->created());
-    glBindBuffer(GL_ARRAY_BUFFER, m_Coord->getId());
-    GLint positionLocation = m_Shader->attributeLocation("a_pos");
+    assert(m_coord->created());
+    glBindBuffer(GL_ARRAY_BUFFER, m_coord->getId());
+    GLint positionLocation = m_shader->attributeLocation("a_pos");
     glVertexAttribPointer(positionLocation, 3, GL_FLOAT, 0, 12, 0);
     glEnableVertexAttribArray(positionLocation);
     assert(glGetError()==GL_NO_ERROR);
@@ -56,25 +56,26 @@ void Icon_GL::draw() {
     // do scaling
     mat3 S;
     eye3x3(S);
-    S(0,0) = float(width()) / float(m_Texture->width());
-    S(1,1) = float(height()) / float(m_Texture->height());
+    S(0,0) = float(width()) / float(m_texture->width());
+    S(1,1) = float(height()) / float(m_texture->height());
     mat3 T = transform();
-    m_Transformation = T*S;
+    m_transf = T*S;
 
-    GLint transformLocation = m_Shader->uniformLocation("u_T");
-    glUniformMatrix3fv(transformLocation, 1, GL_FALSE, &m_Transformation(0,0));
+    GLint transformLocation = m_shader->uniformLocation("u_T");
+    glUniformMatrix3fv(transformLocation, 1, GL_FALSE, &m_transf(0,0));
     assert(glGetError()==GL_NO_ERROR);
 
-    assert(m_Texture->loaded());
-    GLint textureLocation = m_Shader->uniformLocation("u_icon");
+    assert(m_texture->loaded());
+    GLint textureLocation = m_shader->uniformLocation("u_icon");
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, m_Texture->getTextureId());
+    glBindTexture(GL_TEXTURE_2D, m_texture->getTextureId());
     glUniform1i(textureLocation, 0);
     assert(glGetError()==GL_NO_ERROR);
 
     glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     assert(glGetError()==GL_NO_ERROR);
+
 }
 
 const std::string Icon_GL::sc_VertexShader =

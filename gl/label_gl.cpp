@@ -58,7 +58,7 @@ void Label_GL::initialize() {
         vec2< float >& ctc = m_glyphAtlas->location(cc);
 
         GLfloat x0 = cx + cg.left;
-        GLfloat y0 = cy - cg.height+cg.top;
+        GLfloat y0 = cy - cg.height + cg.top;
         GLfloat x1 = x0 + cg.width;
         GLfloat y1 = y0 + cg.height;
 

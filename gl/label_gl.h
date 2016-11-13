@@ -22,6 +22,10 @@ public:
         initialize();
     }
 
+    void width(ui::uint) { } // cannot change width
+
+    void height(ui::uint) { } // cannot change height
+
     ui::uint size() const { return m_textSize; }
 
     void size(ui::uint s) {

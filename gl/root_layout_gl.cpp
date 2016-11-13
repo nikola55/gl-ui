@@ -42,13 +42,13 @@ shared_ptr<RootLayout_GL> RootLayout_GL::create(uint w, uint h) {
 }
 
 void RootLayout_GL::addChild(shared_ptr<View> chld) {
-    m_RootView = chld;
+    m_rootView = chld;
 }
 
 void RootLayout_GL::removeChild(shared_ptr<View> chld) {
-    View *root = m_RootView;
+    View *root = m_rootView;
     if(root == chld) {
-        m_RootView = shared_ptr<View>(0);
+        m_rootView = shared_ptr<View>(0);
     }
 }
 
@@ -58,28 +58,28 @@ uint RootLayout_GL::childrenCount() const {
 
 void RootLayout_GL::draw() {
 
-    if(m_RootView == 0) {
+    if(m_rootView == 0) {
         return;
     }
 
     glViewport(0, 0, width(), height());
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    point pos = m_RootView->position();
-    uint w = m_RootView->width();
-    uint h = m_RootView->height();
+    point pos = m_rootView->position();
+    uint w = m_rootView->width();
+    uint h = m_rootView->height();
 
-    Drawable_GL &drawable = dynamic_cast<Drawable_GL&>(*m_RootView);
+    Drawable_GL &drawable = dynamic_cast<Drawable_GL&>(*m_rootView);
 
-    mat3 TranslateChild;
-    eye3x3(TranslateChild);
-    TranslateChild(0,2) = pos.x;
-    TranslateChild(1,2) = pos.y;
-    mat3 TransformChild = T*TranslateChild;
+    mat3 transl;
+    eye3x3(transl);
+    transl(0,2) = pos.x;
+    transl(1,2) = pos.y;
+    mat3 transf = T*transl;
 
-    drawable.transform(TransformChild);
+    drawable.transform(transf);
 
-    m_RootView->draw();
+    m_rootView->draw();
 
     eglSwapBuffers(m_EGLContext.getDisplay(), m_EGLContext.getSurface());
 }

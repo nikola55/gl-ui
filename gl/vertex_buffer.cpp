@@ -7,7 +7,7 @@ using ui::uint;
 
 template < class _Type > VertexBuffer<_Type>::VertexBuffer(const _Type *buf, unsigned bufSz) : m_bufferId(0) {
     glGenBuffers(1, &m_bufferId);
-    if(glGetError() != GL_NO_ERROR) {
+    if( glGetError() != GL_NO_ERROR) {
         m_bufferId = 0;
         return;
     }

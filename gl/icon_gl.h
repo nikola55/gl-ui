@@ -22,13 +22,13 @@ public:
 
 private:
 
-    ui::mat3 m_Transformation;
-    ui::shared_ptr<Texture> m_Texture;
+    ui::mat3 m_transf;
+    ui::shared_ptr<Texture> m_texture;
 
-    ui::shared_ptr< VertexBuffer<GLfloat> > m_Coord;
-    ui::shared_ptr< VertexBuffer<GLfloat> > m_TexCoord;
+    ui::shared_ptr< VertexBuffer<GLfloat> > m_coord;
+    ui::shared_ptr< VertexBuffer<GLfloat> > m_texCoord;
 
-    ui::shared_ptr<ShaderProgram> m_Shader;
+    ui::shared_ptr<ShaderProgram> m_shader;
 
     static const std::string sc_VertexShader;
     static const std::string sc_FragShader;

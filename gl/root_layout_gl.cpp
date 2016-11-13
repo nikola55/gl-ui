@@ -31,6 +31,7 @@ RootLayout_GL::RootLayout_GL(uint width, uint height) : m_EGLContext(width, heig
     glEnable(GL_SCISSOR_TEST);
     glEnable (GL_BLEND);
     glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glViewport(0, 0, width, height);
 }
 
 RootLayout_GL::~RootLayout_GL() {
@@ -62,20 +63,17 @@ void RootLayout_GL::draw() {
         return;
     }
 
-    glViewport(0, 0, width(), height());
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     point pos = m_rootView->position();
-    uint w = m_rootView->width();
-    uint h = m_rootView->height();
 
     Drawable_GL &drawable = dynamic_cast<Drawable_GL&>(*m_rootView);
 
-    mat3 transl;
+    static mat3 transl, transf;
     eye3x3(transl);
     transl(0,2) = pos.x;
     transl(1,2) = pos.y;
-    mat3 transf = T*transl;
+    transf = T*transl;
 
     drawable.transform(transf);
 

@@ -16,9 +16,9 @@ public:
 
     void draw();
 
-    void transform(ui::mat3);
+    void transform(const ui::mat3& t) { m_transf = t; }
 
-    ui::mat3 transform();
+    const ui::mat3& transform() const { return m_transf; }
 
 private:
 

@@ -14,19 +14,13 @@ ListLayout_GL::ListLayout_GL(bool horizontal) : ListLayout(horizontal) {
     eye3x3(T);
 }
 
-void ListLayout_GL::transform(mat3 t) {
-    T = t;
-}
-
-mat3 ListLayout_GL::transform() {
-    return T;
-}
-
 void ListLayout_GL::draw() {
 
     std::list< shared_ptr< View > >::iterator chldIter = m_children.begin();
 
     uint offset = 0;
+    static mat3 translate, transform;
+    eye3x3(translate);
 
     for(; chldIter != m_children.end() ; chldIter++) {
         View *cv = *chldIter;
@@ -51,14 +45,13 @@ void ListLayout_GL::draw() {
                 }
                 offset += padding() + cv->height();
             }
-            mat3 Translate;
-            eye3x3(Translate);
-            Translate(0,2)=tx;
-            Translate(1,2)=ty;
-            mat3 Transform = T*Translate;
+
+            translate(0,2)=tx;
+            translate(1,2)=ty;
+            transform = T*translate;
             cv->width(cvWidth);
             cv->height(cvHeight);
-            cd->transform(Transform);
+            cd->transform(transform);
             cv->draw();
         }
     }

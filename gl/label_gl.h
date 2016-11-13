@@ -33,7 +33,7 @@ public:
         initialize();
     }
 
-    void transform(ui::mat3 T) {
+    void transform(const ui::mat3& T) {
         m_transform = T;
     }
 
@@ -43,7 +43,7 @@ public:
         m_color[2] = b/255.f;
     }
 
-    ui::mat3 transform() { return m_transform; }
+    const ui::mat3& transform() const { return m_transform; }
 
     void draw();
 

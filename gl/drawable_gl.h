@@ -7,9 +7,9 @@ class Drawable_GL {
 
 public:
 
-    virtual void transform(ui::mat3) = 0;
+    virtual void transform(const ui::mat3&) = 0;
 
-    virtual ui::mat3 transform() = 0;
+    virtual const ui::mat3& transform() const = 0;
 };
 
 }

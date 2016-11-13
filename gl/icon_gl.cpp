@@ -25,16 +25,7 @@ Icon_GL::Icon_GL(const std::string &URI) :
 
 }
 
-mat3 Icon_GL::transform() {
-    return m_transf;
-}
-
-void Icon_GL::transform(mat3 transf) {
-    m_transf = transf;
-}
-
 void Icon_GL::draw() {
-
     assert(m_shader->compiled());
     m_shader->enable();
     assert(glGetError() == GL_NO_ERROR);
@@ -54,12 +45,11 @@ void Icon_GL::draw() {
     assert(glGetError()==GL_NO_ERROR);
 
     // do scaling
-    mat3 S;
+    static mat3 S;
     eye3x3(S);
     S(0,0) = float(width()) / float(m_texture->width());
     S(1,1) = float(height()) / float(m_texture->height());
-    mat3 T = transform();
-    m_transf = T*S;
+    m_transf = m_transf*S;
 
     GLint transformLocation = m_shader->uniformLocation("u_T");
     glUniformMatrix3fv(transformLocation, 1, GL_FALSE, &m_transf(0,0));

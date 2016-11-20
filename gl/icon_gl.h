@@ -12,6 +12,8 @@ class Icon_GL : public ui::Icon, public Drawable_GL {
 
 public:
 
+    Icon_GL(ui::shared_ptr<Texture>);
+
     Icon_GL(const std::string &URI);
 
     void draw();

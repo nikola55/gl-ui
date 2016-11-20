@@ -11,15 +11,14 @@ public:
 
     AbsoluteLayout_GL() { }
 
-    void transform(const ui::mat3& t) { T = t; }
+    void transform(const ui::mat3& t) { m_transform = t; }
 
-    const ui::mat3& transform() const { return T; }
+    const ui::mat3& transform() const { return m_transform; }
 
     void draw();
 
-private:
-    ui::mat3 T;
-
+protected:
+    ui::mat3 m_transform;
 };
 
 }

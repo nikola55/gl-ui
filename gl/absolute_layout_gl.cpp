@@ -20,17 +20,15 @@ void AbsoluteLayout_GL::draw() {
 
     for(; childrenIter != m_children.end() ; childrenIter++) {
         View *currChild = *childrenIter;
-        if(Drawable_GL *drawable = dynamic_cast<Drawable_GL*>(currChild)) {
+        Drawable_GL *drawable = dynamic_cast<Drawable_GL*>(currChild);
+        point pos = currChild->position();
+        uint w = currChild->width();
+        uint h = currChild->height();
 
-            point pos = currChild->position();
-            uint w = currChild->width();
-            uint h = currChild->height();
-
-            trans3x3(transl, pos.x, pos.y);
-            transf = T*transl;
-            drawable->transform(transf);
-            currChild->draw();
-        }
+        trans3x3(transl, pos.x, pos.y);
+        transf = m_transform*transl;
+        drawable->transform(transf);
+        currChild->draw();
     }
 
 }

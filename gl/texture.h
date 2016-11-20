@@ -15,6 +15,13 @@ public:
 
     Texture(const std::string &fileName);
 
+    Texture(GLuint textureId, GLuint width, GLuint height) :
+        m_textureId(textureId),
+        m_width(width),
+        m_height(height) {
+
+    }
+
     ~Texture() {
         if(m_textureId)
             glDeleteTextures(1, &m_textureId);

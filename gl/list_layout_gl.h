@@ -17,6 +17,12 @@ public:
 
     const ui::mat3& transform() const { return T; }
 
+protected:
+
+    void draw_vertical();
+
+    void draw_horizontal();
+
 private:
     ui::mat3 T;
 };

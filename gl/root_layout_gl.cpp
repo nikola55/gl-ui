@@ -31,7 +31,7 @@ RootLayout_GL::RootLayout_GL(uint width, uint height) : m_EGLContext(width, heig
     glEnable(GL_SCISSOR_TEST);
     glEnable (GL_BLEND);
     glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glViewport(0, 0, width, height);
+
 }
 
 RootLayout_GL::~RootLayout_GL() {
@@ -76,6 +76,7 @@ void RootLayout_GL::draw() {
     transf = T*transl;
 
     drawable.transform(transf);
+    glViewport(0, 0, width(), height());
 
     m_rootView->draw();
 

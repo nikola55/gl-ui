@@ -25,6 +25,19 @@ Icon_GL::Icon_GL(const std::string &URI) :
 
 }
 
+Icon_GL::Icon_GL(ui::shared_ptr<Texture> texture) :
+    Icon("<anonymous>"),
+    m_texture(texture),
+    m_coord(VertexBuffer<GLfloat>::getRect3(m_texture->width(), m_texture->height())),
+    m_texCoord(VertexBuffer<GLfloat>::getSquareTexCoord()),
+    m_shader(new ShaderProgram(sc_VertexShader, sc_FragShader)) {
+
+    ui::eye3x3(m_transf);
+
+    width(m_texture->width());
+    height(m_texture->height());
+}
+
 void Icon_GL::draw() {
     assert(m_shader->compiled());
     m_shader->enable();

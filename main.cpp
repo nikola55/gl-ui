@@ -41,6 +41,7 @@ int main(int argc, char * argv[]) {
 
     absLayout->addChild(icon);
     absLayout->addChild(ll);
+    absLayout->addChild(ll);
 
     root->addChild(absLayout);
 
@@ -48,15 +49,15 @@ int main(int argc, char * argv[]) {
     ui::point pos = { 0, 0 };
 
     while(1) {
-        pos.x+=vx;
-        pos.y+=vy;
-        if(pos.x+chView->width() >= 1366 || pos.x <= 0 ) {
-            vx*=-1;
-        }
-        if(pos.y+chView->height() >= 768 || pos.y <= 0 ) {
-            vy*=-1;
-        }
-        ll->position(pos);
+//        pos.x+=vx;
+//        pos.y+=vy;
+//        if(pos.x+chView->width() >= 1366 || pos.x <= 0 ) {
+//            vx*=-1;
+//        }
+//        if(pos.y+chView->height() >= 768 || pos.y <= 0 ) {
+//            vy*=-1;
+//        }
+//        ll->position(pos);
         root->draw();
         usleep(1000*30);
     }

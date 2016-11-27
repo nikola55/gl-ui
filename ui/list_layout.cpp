@@ -6,6 +6,7 @@ ui::ListLayout::ListLayout(bool horizontal) :
 
 void ui::ListLayout::addChild(shared_ptr<View> chld) {
     m_children.push_back(chld);
+    RectangleBaseLayout::changed(true);
 }
 
 void ui::ListLayout::removeChild(shared_ptr<View> chld) {
@@ -14,6 +15,7 @@ void ui::ListLayout::removeChild(shared_ptr<View> chld) {
         const View *v = *i;
         if(v == chld) {
             i = m_children.erase(i);
+            RectangleBaseLayout::changed(true);
         } else {
             i++;
         }

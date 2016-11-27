@@ -16,12 +16,29 @@ ListLayout_GL::ListLayout_GL(bool horizontal) : ListLayout(horizontal) {
 
 void ListLayout_GL::draw() {
 
-    if(horizontal()) {
-        draw_horizontal();
+    bool redraw = false;
+    if(changed()) {
+        redraw = true;
     } else {
-        draw_vertical();
+        std::list< shared_ptr< View > >::iterator chldIter = m_children.begin();
+        for(; chldIter != m_children.end() ; chldIter++) {
+            View *cv = *chldIter;
+            if(cv->changed()) {
+                redraw = true;
+                break;
+            }
+        }
     }
 
+    if(redraw) {
+        if(horizontal()) {
+            draw_horizontal();
+        } else {
+            draw_vertical();
+        }
+    }
+
+    RectangleBaseLayout::changed(false);
 }
 
 void ListLayout_GL::draw_horizontal() {
@@ -32,22 +49,24 @@ void ListLayout_GL::draw_horizontal() {
     float tx, ty, cvHeight, cvWidth;
     for(; chldIter != m_children.end() ; chldIter++) {
         View *cv = *chldIter;
-        Drawable_GL *cd = dynamic_cast<Drawable_GL*>(cv);
-        tx = offset + padding();
-        ty = padding();
-        cvWidth = cv->width();
-        cvHeight = cv->height();
-        if(cvHeight > 2*padding()+height()) {
-            cvHeight = height()-padding();
+        if(cv->changed() || RectangleBaseLayout::changed()) {
+            Drawable_GL *cd = dynamic_cast<Drawable_GL*>(cv);
+            tx = offset + padding();
+            ty = padding();
+            cvWidth = cv->width();
+            cvHeight = cv->height();
+            if(cvHeight > 2*padding()+height()) {
+                cvHeight = height()-padding();
+            }
+            offset+= padding() + cv->width();
+            translate(0,2)=tx;
+            translate(1,2)=ty;
+            transform = T*translate;
+            cv->width(cvWidth);
+            cv->height(cvHeight);
+            cd->transform(transform);
+            cv->draw();
         }
-        offset+= padding() + cv->width();
-        translate(0,2)=tx;
-        translate(1,2)=ty;
-        transform = T*translate;
-        cv->width(cvWidth);
-        cv->height(cvHeight);
-        cd->transform(transform);
-        cv->draw();
     }
 }
 

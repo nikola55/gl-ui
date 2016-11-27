@@ -6,6 +6,7 @@
 namespace gl {
 
 class RootLayout_GL : public ui::RectangleBaseLayout {
+
     RootLayout_GL(uint width, uint height);
     RootLayout_GL(const RootLayout_GL &) : m_EGLContext(0, 0) { }
     RootLayout_GL& operator=(const RootLayout_GL &) { }

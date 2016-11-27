@@ -7,7 +7,9 @@
 namespace ui {
 
 class View : public Focusable, public Pressable {
+
 public:
+
     virtual point position() const = 0;
     virtual void position(point) = 0;
 
@@ -23,9 +25,13 @@ public:
     virtual uint padding() const = 0;
     virtual void padding(uint) = 0;
 
+    virtual bool changed() const = 0;
+    virtual void changed(bool) = 0;
+
     virtual void draw() = 0;
 
     virtual ~View() { }
+
 
 };
 

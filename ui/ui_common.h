@@ -56,10 +56,19 @@ public:
     operator Ptr*() {
         return value;
     }
+    operator const Ptr*() const {
+        return value;
+    }
     Ptr& operator*() {
         return *value;
     }
+    const Ptr& operator*() const {
+        return *value;
+    }
     Ptr* operator->() {
+        return value;
+    }
+    const Ptr* operator->() const {
         return value;
     }
 };

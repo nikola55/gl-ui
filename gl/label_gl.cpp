@@ -137,6 +137,7 @@ void Label_GL::draw() {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     assert(glGetError()==GL_NO_ERROR);
 
+    changed(false);
 }
 
 const string Label_GL::cs_VertexShaderSource =

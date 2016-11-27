@@ -24,9 +24,9 @@ public:
         virtual void onPressed(shared_ptr<View>) = 0;
     };
 
-    virtual void onPress(shared_ptr<OnPressHandler>) { };
+    virtual void onPressHandler(shared_ptr<OnPressHandler>) { };
 
-    virtual shared_ptr<OnPressHandler> onPress() { return 0; };
+    virtual shared_ptr<OnPressHandler> onPressHandler() { return 0; };
 
 };
 

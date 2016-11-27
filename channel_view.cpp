@@ -44,9 +44,7 @@ ChannelView::ChannelView(const std::wstring &title, const std::wstring &epg, con
     addChild(m_title);
     addChild(m_channelIcon);
 
-    GLuint frame;
-    glGenFramebuffers(1, &frame);
-    glBindFramebuffer(GL_FRAMEBUFFER, frame);
+    useAuxiliaryFrameBuffer();
     assert(glGetError() == GL_NO_ERROR);
     GLuint texture;
     glGenTextures(1, &texture);
@@ -86,10 +84,12 @@ ChannelView::ChannelView(const std::wstring &title, const std::wstring &epg, con
     m_transform = prev;
 
     glDeleteRenderbuffers(1, &depth);
-    glDeleteFramebuffers(1, &frame);
+
+    unuseAuxiliaryFrameBuffer();
 }
 
 void ChannelView::draw() {
     m_cached->transform(m_transform);
     m_cached->draw();
+    RectangleBaseLayout::changed(false);
 }

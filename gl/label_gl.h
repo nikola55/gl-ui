@@ -19,6 +19,7 @@ public:
 
     void text(const std::wstring &text) {
         m_text = text;
+        changed(true);
         initialize();
     }
 
@@ -30,6 +31,7 @@ public:
 
     void size(ui::uint s) {
         m_textSize = s;
+        changed(true);
         initialize();
     }
 
@@ -41,6 +43,7 @@ public:
         m_color[0] = r/255.f;
         m_color[1] = g/255.f;
         m_color[2] = b/255.f;
+        changed(true);
     }
 
     const ui::mat3& transform() const { return m_transform; }

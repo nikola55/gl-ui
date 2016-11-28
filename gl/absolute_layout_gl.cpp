@@ -14,14 +14,12 @@ using ui::trans3x3;
 
 void AbsoluteLayout_GL::draw() {
 
-    std::list<shared_ptr<View> >::iterator childrenIter = m_children.begin();
-
     bool redraw = false;
     if(changed()) {
         redraw = true;
     } else {
-        for(; childrenIter != m_children.begin() ; childrenIter++) {
-            View *currChild = *childrenIter;
+        for(uint i = 0 ; i < childrenCount() ; i++) {
+            View *currChild = getChild(i);
             if(currChild->changed()) {
                 redraw = true;
                 break;
@@ -33,9 +31,8 @@ void AbsoluteLayout_GL::draw() {
     eye3x3(transl);
 
     if(redraw) {
-        childrenIter = m_children.begin();
-        for(; childrenIter != m_children.end() ; childrenIter++) {
-            View *currChild = *childrenIter;
+        for(uint i = 0 ; i < childrenCount() ; i++) {
+            View *currChild =  getChild(i);
             Drawable_GL *drawable = dynamic_cast<Drawable_GL*>(currChild);
             point pos = currChild->position();
             uint w = currChild->width();
@@ -48,7 +45,7 @@ void AbsoluteLayout_GL::draw() {
         }
     }
 
-    RectangleBaseLayout::changed(false);
+    changed(false);
 
 }
 

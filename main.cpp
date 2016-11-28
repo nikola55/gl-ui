@@ -23,6 +23,7 @@ using native::Timer;
 #define BG_LOC "/home/nikola/7031585-purple-plain-background.jpg"
 #define LOGO1_LOC "/home/nikola/Desktop/logo_bnt.png"
 #define LOGO2_LOC "/home/nikola/Desktop/logo_btv.png"
+#define TEXTBOX_LOC "/home/nikola/Desktop/text_box.png"
 
 class TaskBase {
 public:
@@ -87,6 +88,10 @@ public:
         redrawTask(new Redraw(rootView)) {
 
     }
+    ~Enqueuer() {
+        delete redrawTask;
+        delete updateTask;
+    }
 
     void exec() {
         taskQueue.enqueue(redrawTask);
@@ -103,7 +108,7 @@ int main(int argc, char * argv[]) {
     shared_ptr<ChannelView> chView = new ChannelView(L"БНТ 1 HD", L"15:30 - 16:30 Още от деня на изборите", LOGO1_LOC);
     shared_ptr<ChannelView> chView2 = new ChannelView(L"bTV HD", L"15:30 - 16:30 Студио Избори 2016", LOGO2_LOC);
     shared_ptr<ListLayout> ll = viewFactory->makeListLayout(false);
-    shared_ptr<Icon> text_box = viewFactory->makeIcon("/home/nikola/Desktop/text_box.png");
+    shared_ptr<Icon> text_box = viewFactory->makeIcon(TEXTBOX_LOC);
     ui::point tpos = { (1366-text_box->width())/2, 768 - 100 };
     text_box->position(tpos);
 
@@ -113,7 +118,7 @@ int main(int argc, char * argv[]) {
     ll->addChild(chView);
     ll->addChild(chView2);
     ll->addChild(chView);
-    ll->padding(10);
+    ll->padding(2);
 
     shared_ptr<Icon> icon = viewFactory->makeIcon(BG_LOC);
 

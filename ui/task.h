@@ -3,12 +3,7 @@
 
 namespace ui {
 
-template < typename Task_Type > class TaskExecutor {
-public:
-    void operator()(Task_Type &tt) {
-        tt();
-    }
-};
+template < typename Task_Type > class TaskExecutor { };
 
 }
 

@@ -67,18 +67,16 @@ void RootLayout_GL::draw() {
     point pos = m_rootView->position();
 
     View* rootView = m_rootView;
-    Drawable_GL *drawable = dynamic_cast<Drawable_GL*>(rootView);
-
-    static mat3 transl, transf;
-    eye3x3(transl);
-    transl(0,2) = pos.x;
-    transl(1,2) = pos.y;
-    transf = T*transl;
-
-    drawable->transform(transf);
-    glViewport(0, 0, width(), height());
-
-    m_rootView->draw();
-
-    eglSwapBuffers(m_EGLContext.getDisplay(), m_EGLContext.getSurface());
+    if(rootView->changed()) {
+        Drawable_GL *drawable = dynamic_cast<Drawable_GL*>(rootView);
+        static mat3 transl, transf;
+        eye3x3(transl);
+        transl(0,2) = pos.x;
+        transl(1,2) = pos.y;
+        transf = T*transl;
+        drawable->transform(transf);
+        glViewport(0, 0, width(), height());
+        m_rootView->draw();
+        eglSwapBuffers(m_EGLContext.getDisplay(), m_EGLContext.getSurface());
+    }
 }

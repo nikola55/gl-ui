@@ -1,9 +1,12 @@
 #ifndef RECTANGLEBASELAYOUT_H
 #define RECTANGLEBASELAYOUT_H
 #include "layout.h"
+#include <vector>
+
 namespace ui {
 class RectangleBaseLayout : public Layout {
 public:
+
     RectangleBaseLayout() :
         m_width(0),
         m_height(0),
@@ -28,7 +31,7 @@ public:
         changed(true);
     }
 
-    uint height() const {  return m_height; }
+    uint height() const { return m_height; }
 
     void height(uint h) {
         m_height = h;
@@ -49,11 +52,57 @@ public:
         changed(true);
     }
 
-    bool changed() const { return m_changed; }
+    void addChild(shared_ptr<View> chld) {
+        m_children.push_back(chld); // TODO: check for self
+        changed(true);
+    }
+
+    shared_ptr<View> getChild(uint idx) const {
+        if(idx < m_children.size()) {
+            return m_children[idx];
+        } else {
+            return 0;
+        }
+    }
+
+    void removeChild(shared_ptr<View> chld) {
+        View *c = chld;
+        void* base = dynamic_cast<void*>(c);
+        std::vector<ui::shared_ptr<View> >::iterator chldItr = m_children.begin();
+        while(chldItr!=m_children.end()) {
+            View *x = *chldItr;
+            if(base == dynamic_cast<void*>(x)) {
+                chldItr = m_children.erase(chldItr);
+                changed(true);
+            } else {
+                chldItr++;
+            }
+        }
+    }
+
+    uint childrenCount() const { return m_children.size(); }
+
+    bool changed() const {
+        uint numChld = childrenCount();
+        bool cChanged = false;
+        for(uint c = 0 ; c < numChld ; c++) {
+            ui::shared_ptr<View> chld = getChild(c);
+            if(chld && chld->changed()) {
+                cChanged = true;
+                break;
+            }
+        }
+        return m_changed || cChanged;
+    }
+
     void changed(bool c) { m_changed = c; }
 
-private:
+protected:
 
+    void beforeDraw(const shared_ptr<View>& chld) {  };
+
+private:
+    std::vector<ui::shared_ptr<View> > m_children;
     point m_position;
     uint m_width;
     uint m_height;

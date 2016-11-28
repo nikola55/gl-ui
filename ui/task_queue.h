@@ -9,23 +9,25 @@ namespace ui {
 
 template < class Task_Type, class Exec_Policy = TaskExecutor<Task_Type> > class TaskQueue {
 
-    typedef std::pair<Task_Type, Exec_Policy> Task;
-
-    std::list<Task> m_taskQueue;
+    std::list<Task_Type> m_taskQueue;
+    Exec_Policy m_execPolicy;
 
 public:
 
-    void enqueue(Task_Type task, Exec_Policy policy = Exec_Policy()) {
-        m_taskQueue.push_back(std::make_pair(task, policy));
+    TaskQueue(const Exec_Policy& execPolicy = Exec_Policy()) :
+        m_execPolicy(execPolicy) {
+
+    }
+
+    void enqueue(const Task_Type& task) {
+        m_taskQueue.push_back(task);
     }
 
     void exec() {
 
         while(!m_taskQueue.empty()) {
-            Task& ct = m_taskQueue.back();
-            Exec_Policy& execPolicy = ct.second;
-            Task_Type& task = ct.first;
-            execPolicy(task);
+            Task_Type& ct = m_taskQueue.back();
+            m_execPolicy(ct);
             m_taskQueue.pop_back();
         }
 

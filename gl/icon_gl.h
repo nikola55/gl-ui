@@ -35,7 +35,6 @@ private:
     static const std::string sc_VertexShader;
     static const std::string sc_FragShader;
 
-
 };
 
 }

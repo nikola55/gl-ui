@@ -1,4 +1,4 @@
-aux_source_directory(. SRC_LIST)
+set(SRC_LIST image_io.cpp timer.cpp window.cpp)
 
 set(X11_HEADERS_PATH /usr/include)
 set(X11_LIBRARY_PATH /usr/lib)

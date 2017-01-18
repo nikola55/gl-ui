@@ -7,14 +7,16 @@
 
 namespace ui {
 
-template < class Task_Type, class Exec_Policy = TaskExecutor<Task_Type> > class TaskQueue {
+template < class Task_Type,
+           template <class> class Exec_Policy = TaskExecutor
+          > class TaskQueue {
 
     std::list<Task_Type> m_taskQueue;
-    Exec_Policy m_execPolicy;
+    Exec_Policy<Task_Type> m_execPolicy;
 
 public:
 
-    TaskQueue(const Exec_Policy& execPolicy = Exec_Policy()) :
+    TaskQueue(const Exec_Policy<Task_Type>& execPolicy = Exec_Policy<Task_Type>()) :
         m_execPolicy(execPolicy) {
 
     }
@@ -26,9 +28,9 @@ public:
     void exec() {
 
         while(!m_taskQueue.empty()) {
-            Task_Type& ct = m_taskQueue.back();
+            Task_Type& ct = m_taskQueue.front();
             m_execPolicy(ct);
-            m_taskQueue.pop_back();
+            m_taskQueue.pop_front();
         }
 
     }

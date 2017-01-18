@@ -18,6 +18,7 @@ public:
     void draw();
 
     void addChild(ui::shared_ptr<ui::View> chld);
+
     ui::shared_ptr<View> getChild(uint idx) const {
         if(idx == 0) {
             return m_rootView;
@@ -25,7 +26,9 @@ public:
             return 0;
         }
     }
+
     void removeChild(ui::shared_ptr<ui::View> chld);
+
     ui::uint childrenCount() const;
 
     static ui::shared_ptr<RootLayout_GL> create(uint w, uint h);

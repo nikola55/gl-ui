@@ -6,6 +6,7 @@
 namespace ui {
 
 typedef uint32_t uint;
+typedef int32_t sint;
 typedef uint64_t ulong;
 typedef uint8_t byte;
 
@@ -168,8 +169,9 @@ public:
     }
 
     image& operator=(const image &x) {
-        this->grid::operator =(x);
+        grid::operator =(x);
         m_bitsPerSample = x.m_bitsPerSample;
+        return *this;
     }
 
     byte bitsPerSample() const {

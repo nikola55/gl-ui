@@ -1,4 +1,6 @@
 #include <unistd.h>
+#include <fcntl.h>
+#include <linux/input.h>
 #include <string>
 #include "channel_view.h"
 #include <root_layout_gl.h>
@@ -7,6 +9,7 @@
 #include <time.h>
 #include <stdio.h>
 #include <timer.h>
+#include <list>
 #include <task_queue.h>
 
 using ui::shared_ptr;
@@ -20,10 +23,11 @@ using ui::AbsoluteLayout;
 
 using native::Timer;
 
-#define BG_LOC "/home/nikola/7031585-purple-plain-background.jpg"
+#define BG_LOC "7031585-purple-plain-background.jpg"
 #define LOGO1_LOC "/home/nikola/Desktop/logo_bnt.png"
 #define LOGO2_LOC "/home/nikola/Desktop/logo_btv.png"
 #define TEXTBOX_LOC "/home/nikola/Desktop/text_box.png"
+#define MOUSE_POINTER "082745-grunge-brushed-metal-pewter-icon-business-cursor.png"
 
 class TaskBase {
 public:
@@ -57,51 +61,102 @@ class Update : public TaskBase {
     ui::point pos;
     uint vx;
     uint vy;
+    uint vwidth;
+    uint vheight;
 public:
     Update(shared_ptr<ui::View> view) : m_view(view) {
         pos.x = 0;
         pos.y = 0;
         vx = 3;
         vy = 3;
+        vwidth = m_view->width();
+        vheight = m_view->height();
     }
     void exec() {
         pos.x+=vx;
         pos.y+=vy;
-        if(pos.x+250 >= 1366 || pos.x <= 0 ) {
+        if(pos.x+vwidth >= 1366 || pos.x <= 0 ) {
             vx*=-1;
         }
-        if(pos.y+520 >= 768 || pos.y <= 0 ) {
+        if(pos.y+vheight >= 768 || pos.y <= 0 ) {
             vy*=-1;
         }
         m_view->position(pos);
     }
 };
 
-class Enqueuer : public TaskBase {
-    ui::TaskQueue<TaskBase*>& taskQueue;
-    Update* updateTask;
-    Redraw* redrawTask;
+class ReadMouse : public TaskBase {
+    const std::string m_mouseFile;
+    input_event m_inputEvent;
+    int m_absX;
+    int m_absY;
+    int m_mouseFd;
+    shared_ptr<ui::View> m_mouseView;
 public:
-    Enqueuer(ui::TaskQueue<TaskBase*>& taskQueue, shared_ptr<ui::View> view, shared_ptr<ui::View> rootView) :
-        taskQueue(taskQueue),
-        updateTask(new Update(view)),
-        redrawTask(new Redraw(rootView)) {
+
+    ReadMouse(const std::string& mouseFile, shared_ptr<ui::View> mouseView) :
+        m_mouseFile(mouseFile),
+        m_absX(0),
+        m_absY(0),
+        m_mouseFd(0),
+        m_mouseView(mouseView) {
+
+        if((m_mouseFd=open(m_mouseFile.c_str(), O_RDONLY|O_NONBLOCK))!=-1) {
+            // opened
+        }
 
     }
-    ~Enqueuer() {
-        delete redrawTask;
-        delete updateTask;
+
+    ~ReadMouse() {
+        if(m_mouseFd != -1)
+            close(m_mouseFd);
     }
 
     void exec() {
-        taskQueue.enqueue(redrawTask);
-        taskQueue.enqueue(updateTask);
+        if(read(m_mouseFd, &m_inputEvent, sizeof(m_inputEvent))!=-1) {
+            uint8_t *ptr = reinterpret_cast<uint8_t*>(&m_inputEvent);
+            uint8_t button = ptr[0];
+            bool lClick = button & 0x1;
+            bool rClick = 0 < (button & 0x2);
+            bool mClick = 0 < (button & 0x4);
+            int8_t relX = ptr[1];
+            int8_t relY = ptr[2];
+            m_absX += relX;
+            m_absY += relY;
+            if(m_absX > 0 && m_absY > 0) {
+                ui::point p = { m_absX, m_absY };
+                m_mouseView->position(p);
+            }
+        }
+    }
+
+};
+
+class Enqueuer : public TaskBase {
+    ui::TaskQueue<TaskBase*>& taskQueue;
+    std::list<TaskBase*> m_taskList;
+public:
+    Enqueuer(ui::TaskQueue<TaskBase*>& taskQueue, shared_ptr<ui::View> view, shared_ptr<ui::View> rootView) :
+        taskQueue(taskQueue){
+
+    }
+    ~Enqueuer() {
+
+    }
+    void addTask(TaskBase *task) {
+        m_taskList.push_back(task);
+    }
+
+    void exec() {
+        for(std::list<TaskBase*>::iterator i = m_taskList.begin() ; i!= m_taskList.end() ;i++) {
+            taskQueue.enqueue(*i);
+        }
         taskQueue.enqueue(this);
     }
 };
 
-
 int main(int argc, char * argv[]) {
+
 
     shared_ptr<RootLayout_GL> root = RootLayout_GL::create(1366, 768);
     shared_ptr<ViewFactory_GL> viewFactory = new ViewFactory_GL;
@@ -121,20 +176,22 @@ int main(int argc, char * argv[]) {
     ll->padding(2);
 
     shared_ptr<Icon> icon = viewFactory->makeIcon(BG_LOC);
+    shared_ptr<Icon> mouse = viewFactory->makeIcon(MOUSE_POINTER);
 
     shared_ptr<AbsoluteLayout> absLayout = viewFactory->makeAbsoluteLayout();
 
     absLayout->addChild(icon);
     absLayout->addChild(ll);
     absLayout->addChild(text_box);
+    absLayout->addChild(mouse);
 
     root->addChild(absLayout);
 
-    uint vx=3, vy=3;
-    ui::point pos = { 0, 0 };
-
     ui::TaskQueue<TaskBase*> taskQueue;
     Enqueuer enq(taskQueue, ll, root);
+    enq.addTask(new Update(ll));
+    enq.addTask(new Redraw(root));
+    enq.addTask(new ReadMouse("/dev/input/mouse0", mouse));
     taskQueue.enqueue(&enq);
     taskQueue.exec();
 }

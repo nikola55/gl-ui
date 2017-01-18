@@ -11,7 +11,7 @@ using gl::Icon_GL;
 
 ui::shared_ptr<gl::Icon_GL> ChannelView::s_background;
 
-#define CHBG_LOC "/home/nikola/Desktop/bg_grad.png"
+#define CHBG_LOC "bg_grad.png"
 
 ChannelView::ChannelView(const std::wstring &title, const std::wstring &epg, const std::string &iconPath) {
 

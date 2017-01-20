@@ -1,17 +1,68 @@
 #ifndef TASK_QUEUE_H
 #define TASK_QUEUE_H
 #include <utility>
+#include <queue>
 #include <list>
-
-#include "task.h"
 
 namespace ui {
 
-template < class Task_Type,
-           template <class> class Exec_Policy = TaskExecutor
-          > class TaskQueue {
+template <class Task_Type> class Fifo {
 
-    std::list<Task_Type> m_taskQueue;
+public:
+
+    void push(const Task_Type& taskType) {
+        m_taskList.push_back(taskType);
+    }
+
+    Task_Type& peek() {
+        return m_taskList.front();
+    }
+
+    void pop() {
+        m_taskList.pop_front();
+    }
+
+    bool empty() {
+        return m_taskList.size()==0;
+    }
+
+private:
+    std::list<Task_Type> m_taskList;
+};
+
+template <class Task_Type> class PriorityQueue {
+
+public:
+
+    void push(const Task_Type& taskType) {
+        m_prioQueue.push(taskType);
+    }
+
+    Task_Type& peek() {
+        return m_prioQueue.top();
+    }
+
+    void pop() {
+        m_prioQueue.pop();
+    }
+
+    bool empty() {
+        return m_prioQueue.empty();
+    }
+
+private:
+
+    std::priority_queue<Task_Type> m_prioQueue;
+
+};
+
+template < typename Task_Type > class TaskExecutor { };
+
+template < class Task_Type,
+           template <class> class Exec_Policy = TaskExecutor,
+           template <class> class Task_Holder = Fifo
+          > class TaskQueue : Task_Holder<Task_Type> {
+
     Exec_Policy<Task_Type> m_execPolicy;
 
 public:
@@ -21,18 +72,14 @@ public:
 
     }
 
-    void enqueue(const Task_Type& task) {
-        m_taskQueue.push_back(task);
-    }
+    using Task_Holder<Task_Type>::push;
 
     void exec() {
-
-        while(!m_taskQueue.empty()) {
-            Task_Type& ct = m_taskQueue.front();
+        while(!Task_Holder<Task_Type>::empty()) {
+            Task_Type& ct = Task_Holder<Task_Type>::peek();
             m_execPolicy(ct);
-            m_taskQueue.pop_front();
+            Task_Holder<Task_Type>::pop();
         }
-
     }
 
 };

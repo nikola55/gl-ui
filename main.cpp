@@ -149,14 +149,13 @@ public:
 
     void exec() {
         for(std::list<TaskBase*>::iterator i = m_taskList.begin() ; i!= m_taskList.end() ;i++) {
-            taskQueue.enqueue(*i);
+            taskQueue.push(*i);
         }
-        taskQueue.enqueue(this);
+        taskQueue.push(this);
     }
 };
 
 int main(int argc, char * argv[]) {
-
 
     shared_ptr<RootLayout_GL> root = RootLayout_GL::create(1366, 768);
     shared_ptr<ViewFactory_GL> viewFactory = new ViewFactory_GL;
@@ -187,11 +186,12 @@ int main(int argc, char * argv[]) {
 
     root->addChild(absLayout);
 
+
     ui::TaskQueue<TaskBase*> taskQueue;
     Enqueuer enq(taskQueue, ll, root);
     enq.addTask(new Update(ll));
     enq.addTask(new Redraw(root));
     enq.addTask(new ReadMouse("/dev/input/mouse0", mouse));
-    taskQueue.enqueue(&enq);
+    taskQueue.push(&enq);
     taskQueue.exec();
 }

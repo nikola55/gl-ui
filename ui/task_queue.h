@@ -56,7 +56,12 @@ private:
 
 };
 
-template < typename Task_Type > class TaskExecutor { };
+template < typename Task_Type > class TaskExecutor {
+public:
+    void execute(Task_Type& task) {
+        task();
+    }
+};
 
 template < class Task_Type,
            template <class> class Exec_Policy = TaskExecutor,
@@ -77,7 +82,7 @@ public:
     void exec() {
         while(!Task_Holder<Task_Type>::empty()) {
             Task_Type& ct = Task_Holder<Task_Type>::peek();
-            m_execPolicy(ct);
+            m_execPolicy.execute(ct);
             Task_Holder<Task_Type>::pop();
         }
     }

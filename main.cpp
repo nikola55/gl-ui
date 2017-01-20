@@ -37,7 +37,7 @@ public:
 namespace ui {
 template <> class TaskExecutor<TaskBase*> {
 public:
-    void operator()(TaskBase* tb) {
+    void execute(TaskBase* tb) {
         tb->exec();
     }
 };

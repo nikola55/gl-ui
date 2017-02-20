@@ -7,6 +7,8 @@ class Drawable_GL {
 
     friend class RootLayout_GL;
 
+    friend class RootLayout_SDL;
+
     static void initAuxiliaryFrameBuffer();
 
     static void destroyAuxiliaryFrameFuffer();

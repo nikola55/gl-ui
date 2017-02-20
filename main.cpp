@@ -3,7 +3,7 @@
 #include <linux/input.h>
 #include <string>
 #include "channel_view.h"
-#include <root_layout_gl.h>
+#include <root_layout_sdl.h>
 #include <view_factory_gl.h>
 #include <list_layout.h>
 #include <label.h>
@@ -16,7 +16,7 @@
 using ui::shared_ptr;
 
 using gl::ViewFactory_GL;
-using gl::RootLayout_GL;
+using gl::RootLayout_SDL;
 using ui::Icon;
 using ui::Label;
 using ui::ListLayout;
@@ -136,18 +136,16 @@ public:
 class Enqueuer : public TaskBase {
     ui::TaskQueue<TaskBase*>& taskQueue;
     std::list<TaskBase*> m_taskList;
+    Timer *timer;
 public:
     Enqueuer(ui::TaskQueue<TaskBase*>& taskQueue, shared_ptr<ui::View> view, shared_ptr<ui::View> rootView) :
-        taskQueue(taskQueue){
-
+        taskQueue(taskQueue) {
     }
     ~Enqueuer() {
-
     }
     void addTask(TaskBase *task) {
         m_taskList.push_back(task);
     }
-
     void exec() {
         for(std::list<TaskBase*>::iterator i = m_taskList.begin() ; i!= m_taskList.end() ;i++) {
             taskQueue.push(*i);
@@ -157,8 +155,8 @@ public:
 };
 
 int main(int argc, char * argv[]) {
-
-    shared_ptr<RootLayout_GL> root = RootLayout_GL::create(1366, 768);
+    ui::point rl_pos = {0,0};
+    shared_ptr<RootLayout_SDL> root = RootLayout_SDL::create(rl_pos, 1366, 768);
     shared_ptr<ViewFactory_GL> viewFactory = new ViewFactory_GL;
     shared_ptr<ChannelView> chView = new ChannelView(L"БНТ 1 HD", L"15:30 - 16:30 Още от деня на изборите", LOGO1_LOC);
     shared_ptr<ChannelView> chView2 = new ChannelView(L"bTV HD", L"15:30 - 16:30 Студио Избори 2016", LOGO2_LOC);

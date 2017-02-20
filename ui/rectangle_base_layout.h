@@ -52,12 +52,12 @@ public:
         changed(true);
     }
 
-    void addChild(shared_ptr<View> chld) {
+    void addChild(View* chld) {
         m_children.push_back(chld); // TODO: check for self
         changed(true);
     }
 
-    shared_ptr<View> getChild(uint idx) const {
+    View* getChild(uint idx) const {
         if(idx < m_children.size()) {
             return m_children[idx];
         } else {
@@ -65,10 +65,9 @@ public:
         }
     }
 
-    void removeChild(shared_ptr<View> chld) {
-        View *c = chld;
-        void* base = dynamic_cast<void*>(c);
-        std::vector<ui::shared_ptr<View> >::iterator chldItr = m_children.begin();
+    void removeChild(View* chld) {
+        void* base = dynamic_cast<void*>(chld);
+        std::vector<View*>::iterator chldItr = m_children.begin();
         while(chldItr!=m_children.end()) {
             View *x = *chldItr;
             if(base == dynamic_cast<void*>(x)) {
@@ -86,7 +85,7 @@ public:
         uint numChld = childrenCount();
         bool cChanged = false;
         for(uint c = 0 ; c < numChld ; c++) {
-            ui::shared_ptr<View> chld = getChild(c);
+            View* chld = getChild(c);
             if(chld && chld->changed()) {
                 cChanged = true;
                 break;
@@ -99,10 +98,10 @@ public:
 
 protected:
 
-    void beforeDraw(const shared_ptr<View>& chld) {  };
+    void beforeDraw(View* chld) {  };
 
 private:
-    std::vector<ui::shared_ptr<View> > m_children;
+    std::vector<View*> m_children;
     point m_position;
     uint m_width;
     uint m_height;

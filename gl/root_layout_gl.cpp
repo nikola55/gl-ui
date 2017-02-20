@@ -43,14 +43,14 @@ shared_ptr<RootLayout_GL> RootLayout_GL::create(uint w, uint h) {
     return new RootLayout_GL(w,h);
 }
 
-void RootLayout_GL::addChild(shared_ptr<View> chld) {
+void RootLayout_GL::addChild(View* chld) {
     m_rootView = chld;
 }
 
-void RootLayout_GL::removeChild(shared_ptr<View> chld) {
+void RootLayout_GL::removeChild(View* chld) {
     View *root = m_rootView;
-    if(root == chld) {
-        m_rootView = shared_ptr<View>(0);
+    if(dynamic_cast<void*>(root) == dynamic_cast<void*>(chld)) {
+        m_rootView = 0;
     }
 }
 

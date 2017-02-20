@@ -14,7 +14,7 @@ public:
         m_taskList.push_back(taskType);
     }
 
-    Task_Type& peek() {
+    const Task_Type& peek() const {
         return m_taskList.front();
     }
 
@@ -22,7 +22,7 @@ public:
         m_taskList.pop_front();
     }
 
-    bool empty() {
+    bool empty() const {
         return m_taskList.size()==0;
     }
 
@@ -38,7 +38,7 @@ public:
         m_prioQueue.push(taskType);
     }
 
-    Task_Type& peek() {
+    const Task_Type& peek() const {
         return m_prioQueue.top();
     }
 
@@ -46,7 +46,7 @@ public:
         m_prioQueue.pop();
     }
 
-    bool empty() {
+    bool empty() const {
         return m_prioQueue.empty();
     }
 
@@ -81,7 +81,7 @@ public:
 
     void exec() {
         while(!Task_Holder<Task_Type>::empty()) {
-            Task_Type& ct = Task_Holder<Task_Type>::peek();
+            Task_Type ct = Task_Holder<Task_Type>::peek();
             m_execPolicy.execute(ct);
             Task_Holder<Task_Type>::pop();
         }

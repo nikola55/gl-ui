@@ -17,9 +17,9 @@ public:
 
     void draw();
 
-    void addChild(ui::shared_ptr<ui::View> chld);
+    void addChild(ui::View* chld);
 
-    ui::shared_ptr<View> getChild(uint idx) const {
+    View* getChild(uint idx) const {
         if(idx == 0) {
             return m_rootView;
         } else {
@@ -27,7 +27,7 @@ public:
         }
     }
 
-    void removeChild(ui::shared_ptr<ui::View> chld);
+    void removeChild(ui::View* chld);
 
     ui::uint childrenCount() const;
 
@@ -35,7 +35,7 @@ public:
 
 private:
     ui::mat3 T;
-    ui::shared_ptr<ui::View> m_rootView;
+    ui::View* m_rootView;
     Context_EGL m_EGLContext;
 };
 

@@ -162,6 +162,9 @@ int main(int argc, char * argv[]) {
     shared_ptr<ChannelView> chView = new ChannelView(L"БНТ 1 HD", L"15:30 - 16:30 Още от деня на изборите", LOGO1_LOC);
     shared_ptr<ChannelView> chView2 = new ChannelView(L"bTV HD", L"15:30 - 16:30 Студио Избори 2016", LOGO2_LOC);
     shared_ptr<ListLayout> ll = viewFactory->makeListLayout(false);
+
+
+
     shared_ptr<Icon> text_box = viewFactory->makeIcon(TEXTBOX_LOC);
     ui::point tpos = { (1366-text_box->width())/2, 768 - 100 };
     text_box->position(tpos);
@@ -191,7 +194,7 @@ int main(int argc, char * argv[]) {
     Enqueuer enq(taskQueue, ll, root);
     enq.addTask(new Update(ll));
     enq.addTask(new Redraw(root));
-    enq.addTask(new ReadMouse("/dev/input/mouse0", mouse));
+//    enq.addTask(new ReadMouse("/dev/input/mouse0", mouse));
     taskQueue.push(&enq);
     taskQueue.exec();
 }

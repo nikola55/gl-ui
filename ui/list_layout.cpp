@@ -1,11 +1,11 @@
 #include "list_layout.h"
 
 ui::uint ui::ListLayout::width_horizontal() const {
-    ui::uint padd = padding();
-    ui::uint width = padd;
+    ui::uint pad1 = padding();
+    ui::uint width = pad1;
     for(uint i = 0 ; i < childrenCount() ; i++) {
         View* currChild = getChild(i);
-        width += currChild->width() + padd;
+        width += currChild->width() + pad1;
     }
     return width;
 }

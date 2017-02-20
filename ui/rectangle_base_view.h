@@ -54,10 +54,10 @@ public:
     bool changed() const { return m_changed; }
 
     void changed(bool c) {
-        m_changed = c;
         if(View*p = getParent()) {
-            p->changed(true);
+            p->changed(c);
         }
+        m_changed = true;
     }
 
 protected:

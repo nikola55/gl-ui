@@ -19,8 +19,8 @@ public:
 
     void text(const std::wstring &text) {
         m_text = text;
-        changed(true);
         initialize();
+        changed(true);
     }
 
     void width(ui::uint) { } // cannot change width

@@ -39,6 +39,9 @@ Icon_GL::Icon_GL(ui::shared_ptr<Texture> texture) :
 }
 
 void Icon_GL::draw() {
+
+    if(!changed()) return;
+
     assert(m_shader->compiled());
     m_shader->enable();
     assert(glGetError() == GL_NO_ERROR);

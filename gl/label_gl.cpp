@@ -95,6 +95,8 @@ void Label_GL::initialize() {
 
 void Label_GL::draw() {
 
+    if(!changed()) return;
+
     assert(m_shader->compiled());
     m_shader->enable();
     assert(glGetError()==GL_NO_ERROR);

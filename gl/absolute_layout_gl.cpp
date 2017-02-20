@@ -14,23 +14,10 @@ using ui::trans3x3;
 
 void AbsoluteLayout_GL::draw() {
 
-    bool redraw = false;
-    if(changed()) {
-        redraw = true;
-    } else {
-        for(uint i = 0 ; i < childrenCount() ; i++) {
-            View *currChild = getChild(i);
-            if(currChild->changed()) {
-                redraw = true;
-                break;
-            }
-        }
-    }
-
     static mat3 transl, transf;
     eye3x3(transl);
 
-    if(redraw) {
+    if(changed()) {
         for(uint i = 0 ; i < childrenCount() ; i++) {
             View* currChild = getChild(i);
             if(Drawable_GL *drawable = dynamic_cast<Drawable_GL*>(currChild)) {

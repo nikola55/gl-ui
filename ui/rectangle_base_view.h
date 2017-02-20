@@ -55,6 +55,9 @@ public:
 
     void changed(bool c) {
         m_changed = c;
+        if(View*p = getParent()) {
+            p->changed(true);
+        }
     }
 
 protected:

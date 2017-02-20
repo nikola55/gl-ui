@@ -11,7 +11,10 @@ public:
 
     AbsoluteLayout_GL() { }
 
-    void transform(const ui::mat3& t) { m_transform = t; }
+    void transform(const ui::mat3& t) {
+        m_transform = t;
+        changed(true);
+    }
 
     const ui::mat3& transform() const { return m_transform; }
 

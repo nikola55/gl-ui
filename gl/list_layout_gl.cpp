@@ -16,20 +16,7 @@ ListLayout_GL::ListLayout_GL(bool horizontal) : ListLayout(horizontal) {
 
 void ListLayout_GL::draw() {
 
-    bool redraw = false;
     if(changed()) {
-        redraw = true;
-    } else {
-        for(uint i = 0 ; i < childrenCount() ; i++) {
-            View *cv = getChild(i);
-            if(cv->changed()) {
-                redraw = true;
-                break;
-            }
-        }
-    }
-
-    if(redraw) {
         if(horizontal()) {
             draw_horizontal();
         } else {

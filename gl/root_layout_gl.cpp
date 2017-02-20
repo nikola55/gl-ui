@@ -53,6 +53,10 @@ void RootLayout_GL::draw() {
 
     static mat3 transl, transf;
 
+    if(!changed()) {
+        return;
+    }
+
     if(childrenCount() == 0) {
         return;
     }
@@ -60,16 +64,14 @@ void RootLayout_GL::draw() {
     View* rootView = getChild(0);
 
     point pos = rootView->position();
-    if(rootView->changed()) {
-        if(Drawable_GL *drawable = dynamic_cast<Drawable_GL*>(rootView)) {
-            eye3x3(transl);
-            transl(0,2) = pos.x;
-            transl(1,2) = pos.y;
-            transf = T*transl;
-            drawable->transform(transf);
-            glViewport(0, 0, width(), height());
-            rootView->draw();
-            eglSwapBuffers(m_EGLContext.getDisplay(), m_EGLContext.getSurface());
-        }
+    if(Drawable_GL *drawable = dynamic_cast<Drawable_GL*>(rootView)) {
+        eye3x3(transl);
+        transl(0,2) = pos.x;
+        transl(1,2) = pos.y;
+        transf = T*transl;
+        drawable->transform(transf);
+        glViewport(0, 0, width(), height());
+        rootView->draw();
+        eglSwapBuffers(m_EGLContext.getDisplay(), m_EGLContext.getSurface());
     }
 }

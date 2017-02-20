@@ -31,12 +31,13 @@ public:
 
     void size(ui::uint s) {
         m_textSize = s;
-        changed(true);
         initialize();
+        changed(true);
     }
 
     void transform(const ui::mat3& T) {
         m_transform = T;
+        changed(true);
     }
 
     void text_color(ui::byte r, ui::byte g, ui::byte b) {

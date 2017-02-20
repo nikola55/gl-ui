@@ -13,7 +13,10 @@ public:
 
     void draw();
 
-    void transform(const ui::mat3& t) { T = t; }
+    void transform(const ui::mat3& t) {
+        T = t;
+        changed(true);
+    }
 
     const ui::mat3& transform() const { return T; }
 

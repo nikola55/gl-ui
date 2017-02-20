@@ -17,14 +17,5 @@ void ui::RectangleBaseLayout::removeChild(ui::View *chld) {
 }
 
 bool ui::RectangleBaseLayout::changed() const {
-    uint numChld = childrenCount();
-    bool cChanged = false;
-    for(uint c = 0 ; c < numChld ; c++) {
-        View* chld = getChild(c);
-        if(chld && chld->changed()) {
-            cChanged = true;
-            break;
-        }
-    }
-    return m_changed || cChanged;
+    return m_changed;
 }

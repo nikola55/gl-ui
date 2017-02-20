@@ -53,8 +53,11 @@ public:
     }
 
     void addChild(View* chld) {
-        m_children.push_back(chld); // TODO: check for self
-        changed(true);
+        if(chld) {
+            chld->setParent(this);
+            m_children.push_back(chld); // TODO: check for self
+            changed(true);
+        }
     }
 
     View* getChild(uint idx) const {

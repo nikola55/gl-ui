@@ -8,6 +8,7 @@ void ui::RectangleBaseLayout::removeChild(ui::View *chld) {
         View *x = *chldItr;
         if(base == dynamic_cast<void*>(x)) {
             chldItr = m_children.erase(chldItr);
+            (*chldItr)->setParent(0);
             changed(true);
         } else {
             chldItr++;

@@ -44,39 +44,32 @@ shared_ptr<RootLayout_GL> RootLayout_GL::create(uint w, uint h) {
 }
 
 void RootLayout_GL::addChild(View* chld) {
-    m_rootView = chld;
-}
-
-void RootLayout_GL::removeChild(View* chld) {
-    View *root = m_rootView;
-    if(dynamic_cast<void*>(root) == dynamic_cast<void*>(chld)) {
-        m_rootView = 0;
+    if(childrenCount()==0) {
+        RectangleBaseLayout::addChild(chld);
     }
-}
-
-uint RootLayout_GL::childrenCount() const {
-    return 1;
 }
 
 void RootLayout_GL::draw() {
 
-    if(m_rootView == 0) {
+    static mat3 transl, transf;
+
+    if(childrenCount() == 0) {
         return;
     }
 
-    point pos = m_rootView->position();
+    View* rootView = getChild(0);
 
-    View* rootView = m_rootView;
+    point pos = rootView->position();
     if(rootView->changed()) {
-        Drawable_GL *drawable = dynamic_cast<Drawable_GL*>(rootView);
-        static mat3 transl, transf;
-        eye3x3(transl);
-        transl(0,2) = pos.x;
-        transl(1,2) = pos.y;
-        transf = T*transl;
-        drawable->transform(transf);
-        glViewport(0, 0, width(), height());
-        m_rootView->draw();
-        eglSwapBuffers(m_EGLContext.getDisplay(), m_EGLContext.getSurface());
+        if(Drawable_GL *drawable = dynamic_cast<Drawable_GL*>(rootView)) {
+            eye3x3(transl);
+            transl(0,2) = pos.x;
+            transl(1,2) = pos.y;
+            transf = T*transl;
+            drawable->transform(transf);
+            glViewport(0, 0, width(), height());
+            rootView->draw();
+            eglSwapBuffers(m_EGLContext.getDisplay(), m_EGLContext.getSurface());
+        }
     }
 }

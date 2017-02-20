@@ -20,23 +20,10 @@ public:
 
     void addChild(ui::View* chld);
 
-    View* getChild(uint idx) const {
-        if(idx == 0) {
-            return m_rootView;
-        } else {
-            return 0;
-        }
-    }
-
-    void removeChild(ui::View* chld);
-
-    ui::uint childrenCount() const;
-
     static ui::shared_ptr<RootLayout_GL> create(uint w, uint h);
 
 private:
     ui::mat3 T;
-    ui::View* m_rootView;
     Context_EGL m_EGLContext;
 };
 

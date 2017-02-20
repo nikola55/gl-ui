@@ -5,17 +5,15 @@
 
 namespace gl {
 
-template <class _Type> class VertexBuffer {
+template <class Type> class VertexBuffer {
 
-    GLuint m_bufferId;
+    VertexBuffer(const VertexBuffer &);
 
-    VertexBuffer(const VertexBuffer &) { }
-
-    VertexBuffer& operator&(const VertexBuffer &) { }
+    VertexBuffer& operator&(const VertexBuffer &);
 
 public:
 
-    VertexBuffer(const _Type *buf, unsigned bufSz);
+    VertexBuffer(const Type *buf, unsigned bufSz);
 
     virtual ~VertexBuffer();
 
@@ -27,8 +25,10 @@ public:
 
     static ui::shared_ptr<VertexBuffer> getRect3(ui::uint w, ui::uint h);
 
-    static ui::shared_ptr<VertexBuffer> create(const _Type *buf, unsigned bufSz);
+    static ui::shared_ptr<VertexBuffer> create(const Type *buf, unsigned bufSz);
 
+private:
+    GLuint m_bufferId;
 };
 
 }

@@ -14,17 +14,17 @@ using ui::point;
 using ui::mat3;
 using ui::eye3x3;
 
-RootLayout_GL::RootLayout_GL(uint width, uint height) : m_EGLContext(width, height) {
+RootLayout_GL::RootLayout_GL(uint w, uint h) : m_EGLContext(w, h) {
 
     point pos = { 0, 0 };
-    this->position(pos);
-    this->width(width);
-    this->height(height);
-    this->margin(0);
-    this->padding(0);
+    position(pos);
+    width(w);
+    height(h);
+    margin(0);
+    padding(0);
 
-    T(0,0) = 2.0/float(width); T(0, 1) = 0.0; T(0, 2) = -1.0;
-    T(1,0) = 0.0; T(1, 1) = 2.0/float(height); T(1, 2) = -1.0;
+    T(0,0) = 2.0/w; T(0, 1) = 0.0; T(0, 2) = -1.0;
+    T(1,0) = 0.0; T(1, 1) = 2.0/h; T(1, 2) = -1.0;
     T(2,0) = 0.0; T(2, 1) = 0.0; T(2,2) = 1.0;
 
     glEnable(GL_SCISSOR_TEST);

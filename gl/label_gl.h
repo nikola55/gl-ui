@@ -66,8 +66,8 @@ private:
 
     float m_color[3];
 
-    static const std::string cs_VertexShaderSource;
-    static const std::string cs_FragmentShaderSource;
+    static const std::string sc_vertexShader;
+    static const std::string sc_fragmentShader;
 
 };
 

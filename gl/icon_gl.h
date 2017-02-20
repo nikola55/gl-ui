@@ -32,8 +32,8 @@ private:
 
     ui::shared_ptr<ShaderProgram> m_shader;
 
-    static const std::string sc_VertexShader;
-    static const std::string sc_FragShader;
+    static const std::string sc_vertexShader;
+    static const std::string sc_fragShader;
 
 };
 

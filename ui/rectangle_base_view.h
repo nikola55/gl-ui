@@ -52,7 +52,10 @@ public:
     }
 
     bool changed() const { return m_changed; }
-    void changed(bool c) { m_changed = c; }
+
+    void changed(bool c) {
+        m_changed = c;
+    }
 
 protected:
     point m_position;

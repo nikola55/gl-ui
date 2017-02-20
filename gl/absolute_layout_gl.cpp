@@ -32,16 +32,14 @@ void AbsoluteLayout_GL::draw() {
 
     if(redraw) {
         for(uint i = 0 ; i < childrenCount() ; i++) {
-            View *currChild =  getChild(i);
-            Drawable_GL *drawable = dynamic_cast<Drawable_GL*>(currChild);
-            point pos = currChild->position();
-            uint w = currChild->width();
-            uint h = currChild->height();
-
-            trans3x3(transl, pos.x, pos.y);
-            transf = m_transform*transl;
-            drawable->transform(transf);
-            currChild->draw();
+            View* currChild = getChild(i);
+            if(Drawable_GL *drawable = dynamic_cast<Drawable_GL*>(currChild)) {
+                point pos = currChild->position();
+                trans3x3(transl, pos.x, pos.y);
+                transf = m_transform*transl;
+                drawable->transform(transf);
+                currChild->draw();
+            }
         }
     }
 

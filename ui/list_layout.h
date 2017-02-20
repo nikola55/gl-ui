@@ -1,14 +1,15 @@
 #ifndef LISTLAYOUT_H
 #define LISTLAYOUT_H
 #include "rectangle_base_layout.h"
-#include <list>
 
 namespace ui {
 
 class ListLayout : public RectangleBaseLayout {
 public:
 
-    ListLayout(bool horizontal);
+    ListLayout(bool horizontal) :
+        m_horizontal(horizontal) {
+    }
 
     uint width() const {
         if(horizontal()) {

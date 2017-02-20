@@ -16,7 +16,7 @@ Icon_GL::Icon_GL(const std::string &URI) :
     m_texture(new Texture(URI)),
     m_coord(VertexBuffer<GLfloat>::getRect3(m_texture->width(), m_texture->height())),
     m_texCoord(VertexBuffer<GLfloat>::getSquareTexCoord()),
-    m_shader(new ShaderProgram(sc_VertexShader, sc_FragShader)) {
+    m_shader(new ShaderProgram(sc_vertexShader, sc_fragShader)) {
 
     ui::eye3x3(m_transf);
 
@@ -30,7 +30,7 @@ Icon_GL::Icon_GL(ui::shared_ptr<Texture> texture) :
     m_texture(texture),
     m_coord(VertexBuffer<GLfloat>::getRect3(m_texture->width(), m_texture->height())),
     m_texCoord(VertexBuffer<GLfloat>::getSquareTexCoord()),
-    m_shader(new ShaderProgram(sc_VertexShader, sc_FragShader)) {
+    m_shader(new ShaderProgram(sc_vertexShader, sc_fragShader)) {
 
     ui::eye3x3(m_transf);
 
@@ -82,7 +82,7 @@ void Icon_GL::draw() {
     changed(false);
 }
 
-const std::string Icon_GL::sc_VertexShader =
+const std::string Icon_GL::sc_vertexShader =
     "precision mediump float;\n"
     "attribute vec3 a_pos;\n"
     "attribute vec2 a_coord;\n"
@@ -93,7 +93,7 @@ const std::string Icon_GL::sc_VertexShader =
     "   v_coord = a_coord;\n"
     "}\n";
 
-const std::string Icon_GL::sc_FragShader =
+const std::string Icon_GL::sc_fragShader =
     "precision mediump float;\n"
     "varying vec2 v_coord;\n"
     "uniform sampler2D u_icon;\n"

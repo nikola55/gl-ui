@@ -1,6 +1,5 @@
 #ifndef PRESSABLE_H
 #define PRESSABLE_H
-#include "ui_common.h"
 
 namespace ui {
 
@@ -12,21 +11,21 @@ class Pressable {
 
 public:
 
-    Pressable() : m_pressed(false) { };
+    Pressable() : m_pressed(false) { }
 
-    virtual ~Pressable() { };
+    virtual ~Pressable() { }
 
-    virtual bool pressed() const { return false; };
-    virtual void pressed(bool) { };
+    virtual bool pressed() const { return false; }
+    virtual void pressed(bool) { }
 
     class OnPressHandler {
     public:
-        virtual void onPressed(shared_ptr<View>) = 0;
+        virtual void onPressed(View*) = 0;
     };
 
-    virtual void onPressHandler(shared_ptr<OnPressHandler>) { };
+    virtual void onPressHandler(OnPressHandler*) { }
 
-    virtual shared_ptr<OnPressHandler> onPressHandler() { return 0; };
+    virtual OnPressHandler* onPressHandler() { return 0; }
 
 };
 

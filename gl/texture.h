@@ -7,9 +7,9 @@ namespace gl {
 
 class Texture {
 
-    Texture(const Texture &) { }
+    Texture(const Texture &);
 
-    Texture& operator=(const Texture &) { }
+    Texture& operator=(const Texture &);
 
 public:
 

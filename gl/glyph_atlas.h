@@ -13,9 +13,9 @@ class GlyphAtlas {
 
 private:
 
-    GlyphAtlas(const GlyphAtlas &) { }
+    GlyphAtlas(const GlyphAtlas &);
 
-    GlyphAtlas& operator=(const GlyphAtlas &) { }
+    GlyphAtlas& operator=(const GlyphAtlas &);
 
 public:
 

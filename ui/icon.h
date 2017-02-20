@@ -5,7 +5,9 @@
 namespace ui {
 class Icon : public RectangleBaseView {
 public:
-    Icon(const std::string &URI);
+    Icon(const std::string &URI) :
+        m_URI(URI) {
+    }
 private:
     std::string m_URI;
 };

@@ -5,7 +5,7 @@ using ui::shared_ptr;
 using ui::uint;
 
 
-template < class _Type > VertexBuffer<_Type>::VertexBuffer(const _Type *buf, unsigned bufSz) : m_bufferId(0) {
+template < class Type > VertexBuffer<Type>::VertexBuffer(const Type *buf, unsigned bufSz) : m_bufferId(0) {
     glGenBuffers(1, &m_bufferId);
     if( glGetError() != GL_NO_ERROR) {
         m_bufferId = 0;
@@ -19,7 +19,7 @@ template < class _Type > VertexBuffer<_Type>::VertexBuffer(const _Type *buf, uns
     }
 }
 
-template < class _Type > VertexBuffer<_Type>::~VertexBuffer() {
+template < class Type > VertexBuffer<Type>::~VertexBuffer() {
     if(m_bufferId != 0) {
         glDeleteBuffers(1, &m_bufferId);
         m_bufferId = 0;

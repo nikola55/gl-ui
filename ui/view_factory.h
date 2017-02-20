@@ -2,13 +2,13 @@
 #define VIEWFACTORY_H
 
 #include "ui_common.h"
-#include "label.h"
-#include "icon.h"
-#include "text_input.h"
-#include "list_layout.h"
-#include "absolute_layout.h"
 
 namespace ui {
+
+class Label;
+class Icon;
+class ListLayout;
+class AbsoluteLayout;
 
 class ViewFactory {
 public:

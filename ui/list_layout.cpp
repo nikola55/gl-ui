@@ -1,9 +1,5 @@
 #include "list_layout.h"
 
-ui::ListLayout::ListLayout(bool horizontal) :
-    m_horizontal(horizontal) {
-}
-
 ui::uint ui::ListLayout::width_horizontal() const {
     ui::uint padd = padding();
     ui::uint width = padd;

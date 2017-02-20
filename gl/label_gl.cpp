@@ -25,7 +25,7 @@ using std::vector;
 Label_GL::Label_GL(const wstring &text, uint size) :
     m_text(text),
     m_textSize(size),
-    m_shader(new ShaderProgram(cs_VertexShaderSource, cs_FragmentShaderSource)) {
+    m_shader(new ShaderProgram(sc_vertexShader, sc_fragmentShader)) {
 
     initialize();
 
@@ -140,7 +140,7 @@ void Label_GL::draw() {
     changed(false);
 }
 
-const string Label_GL::cs_VertexShaderSource =
+const string Label_GL::sc_vertexShader =
         "precision mediump float;\n"
         "attribute vec2 a_pos;\n"
         "attribute vec2 a_coord;\n"
@@ -151,7 +151,7 @@ const string Label_GL::cs_VertexShaderSource =
         "   v_coord = a_coord;\n"
         "}\n";
 
-const string Label_GL::cs_FragmentShaderSource =
+const string Label_GL::sc_fragmentShader =
         "precision mediump float;\n"
         "varying vec2 v_coord;\n"
         "uniform vec3 u_color;\n"

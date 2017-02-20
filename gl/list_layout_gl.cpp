@@ -48,15 +48,16 @@ void ListLayout_GL::draw_horizontal() {
     uint pad = padding();
     for(uint i = 0 ; i < childrenCount() ; i++) {
         View *cv = getChild(i);
-        Drawable_GL *cd = dynamic_cast<Drawable_GL*>(cv);
-        tx = offset + pad;
-        ty = pad;
-        offset+= pad + cv->width();
-        translate(0,2)=tx;
-        translate(1,2)=ty;
-        transform = T*translate;
-        cd->transform(transform);
-        cv->draw();
+        if(Drawable_GL *cd = dynamic_cast<Drawable_GL*>(cv)) {
+            tx = offset + pad;
+            ty = pad;
+            offset+= pad + cv->width();
+            translate(0,2)=tx;
+            translate(1,2)=ty;
+            transform = T*translate;
+            cd->transform(transform);
+            cv->draw();
+        }
     }
 }
 
@@ -68,14 +69,15 @@ void ListLayout_GL::draw_vertical() {
     uint pad = padding();
     for(uint i = 0 ; i < childrenCount() ; i++) {
         View *cv = getChild(i);
-        Drawable_GL *cd = dynamic_cast<Drawable_GL*>(cv);
-        tx = pad;
-        ty = offset + pad;
-        offset += pad + cv->height();
-        translate(0,2)=tx;
-        translate(1,2)=ty;
-        transform = T*translate;
-        cd->transform(transform);
-        cv->draw();
+        if(Drawable_GL *cd = dynamic_cast<Drawable_GL*>(cv)) {
+            tx = pad;
+            ty = offset + pad;
+            offset += pad + cv->height();
+            translate(0,2)=tx;
+            translate(1,2)=ty;
+            transform = T*translate;
+            cd->transform(transform);
+            cv->draw();
+        }
     }
 }

@@ -10,9 +10,7 @@ class View : public Focusable, public Pressable {
 
 public:
 
-    View() : m_parent(0) {
-
-    }
+    View();
 
     virtual point position() const = 0;
     virtual void position(point) = 0;
@@ -34,15 +32,11 @@ public:
 
     virtual void draw() = 0;
 
-    virtual void setParent(View* p) {
-        m_parent = p;
-    }
+    virtual void setParent(View* p);
 
-    virtual View* getParent() {
-        return m_parent;
-    }
+    virtual View* getParent();
 
-    virtual ~View() { }
+    virtual ~View();
 
 private:
 

@@ -23,4 +23,4 @@ link_directories(
 add_definitions(-DUSE_X)
 
 add_library(native ${SRC_LIST})
-target_link_libraries(native X11 SDL2 SDL2_image freetype rt)
+#target_link_libraries(native )

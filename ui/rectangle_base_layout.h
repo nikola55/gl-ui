@@ -7,15 +7,7 @@ namespace ui {
 class RectangleBaseLayout : public Layout {
 public:
 
-    RectangleBaseLayout() :
-        m_width(0),
-        m_height(0),
-        m_padding(0),
-        m_margin(0),
-        m_changed(true) {
-        m_position.x = 0;
-        m_position.y = 0;
-    }
+    RectangleBaseLayout();
 
     point position() const { return m_position; }
 

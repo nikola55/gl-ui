@@ -13,7 +13,7 @@ public:
 
     Pressable() : m_pressed(false) { }
 
-    virtual ~Pressable() { }
+    virtual ~Pressable();
 
     virtual bool pressed() const { return false; }
     virtual void pressed(bool) { }
@@ -23,9 +23,9 @@ public:
         virtual void onPressed(View*) = 0;
     };
 
-    virtual void onPressHandler(OnPressHandler*) { }
+    virtual void onPressHandler(OnPressHandler*);
 
-    virtual OnPressHandler* onPressHandler() { return 0; }
+    virtual OnPressHandler *onPressHandler();
 
 };
 

@@ -16,6 +16,8 @@ public:
 
     ui::shared_ptr<ui::AbsoluteLayout> makeAbsoluteLayout();
 
+    ui::shared_ptr<ui::Layout> makeRootLayout(uint sx, uint sy, uint w, uint h);
+
 };
 
 }

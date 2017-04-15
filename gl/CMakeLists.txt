@@ -15,5 +15,5 @@ link_directories(
     GLES2_LIBRARY_PATH  )
 
 add_library(gl ${SRC_LIST})
-target_link_libraries( gl EGL GLESv2 native ui)
+#target_link_libraries( gl  )
 

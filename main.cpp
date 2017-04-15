@@ -16,7 +16,6 @@
 using ui::shared_ptr;
 
 using gl::ViewFactory_GL;
-using gl::RootLayout_SDL;
 using ui::Icon;
 using ui::Label;
 using ui::ListLayout;
@@ -24,10 +23,10 @@ using ui::AbsoluteLayout;
 
 using native::Timer;
 
-#define BG_LOC "7031585-purple-plain-background.jpg"
-#define LOGO1_LOC "/home/nikola/Desktop/logo_bnt.png"
-#define LOGO2_LOC "/home/nikola/Desktop/logo_btv.png"
-#define TEXTBOX_LOC "/home/nikola/Desktop/text_box.png"
+#define BG_LOC "/home/nikola/Downloads/ws_Green_Gradient_Background_1366x768.jpg"
+//#define LOGO1_LOC "/home/nikola/Desktop/logo_bnt.png"
+//#define LOGO2_LOC "/home/nikola/Desktop/logo_btv.png"
+//#define TEXTBOX_LOC "/home/nikola/Desktop/text_box.png"
 #define MOUSE_POINTER "082745-grunge-brushed-metal-pewter-icon-business-cursor.png"
 
 class TaskBase {
@@ -87,45 +86,25 @@ public:
 };
 
 class ReadMouse : public TaskBase {
-    const std::string m_mouseFile;
-    input_event m_inputEvent;
-    int m_absX;
-    int m_absY;
-    int m_mouseFd;
     shared_ptr<ui::View> m_mouseView;
 public:
 
-    ReadMouse(const std::string& mouseFile, shared_ptr<ui::View> mouseView) :
-        m_mouseFile(mouseFile),
-        m_absX(0),
-        m_absY(0),
-        m_mouseFd(0),
+    ReadMouse(shared_ptr<ui::View> mouseView) :
         m_mouseView(mouseView) {
 
-        if((m_mouseFd=open(m_mouseFile.c_str(), O_RDONLY|O_NONBLOCK))!=-1) {
-            // opened
-        }
 
     }
 
     ~ReadMouse() {
-        if(m_mouseFd != -1)
-            close(m_mouseFd);
     }
 
     void exec() {
-        if(read(m_mouseFd, &m_inputEvent, sizeof(m_inputEvent))!=-1) {
-            uint8_t *ptr = reinterpret_cast<uint8_t*>(&m_inputEvent);
-            uint8_t button = ptr[0];
-            bool lClick = button & 0x1;
-            bool rClick = 0 < (button & 0x2);
-            bool mClick = 0 < (button & 0x4);
-            int8_t relX = ptr[1];
-            int8_t relY = ptr[2];
-            m_absX += relX;
-            m_absY += relY;
-            if(m_absX > 0 && m_absY > 0) {
-                ui::point p = { m_absX, m_absY };
+        SDL_Event evt;
+        while(SDL_PollEvent(&evt)) {
+            if(evt.type==SDL_MOUSEMOTION) {
+                ui::point p = m_mouseView->position();
+                p.x+=evt.motion.xrel;
+                p.y-=evt.motion.yrel;
                 m_mouseView->position(p);
             }
         }
@@ -136,9 +115,8 @@ public:
 class Enqueuer : public TaskBase {
     ui::TaskQueue<TaskBase*>& taskQueue;
     std::list<TaskBase*> m_taskList;
-    Timer *timer;
 public:
-    Enqueuer(ui::TaskQueue<TaskBase*>& taskQueue, shared_ptr<ui::View> view, shared_ptr<ui::View> rootView) :
+    Enqueuer(ui::TaskQueue<TaskBase*>& taskQueue, shared_ptr<ui::View> rootView) :
         taskQueue(taskQueue) {
     }
     ~Enqueuer() {
@@ -155,43 +133,17 @@ public:
 };
 
 int main(int argc, char * argv[]) {
-    ui::point rl_pos = {0,0};
-    shared_ptr<RootLayout_SDL> root = RootLayout_SDL::create(rl_pos, 1366, 768);
     shared_ptr<ViewFactory_GL> viewFactory = new ViewFactory_GL;
-    shared_ptr<ChannelView> chView = new ChannelView(L"БНТ 1 HD", L"15:30 - 16:30 Още от деня на изборите", LOGO1_LOC);
-    shared_ptr<ChannelView> chView2 = new ChannelView(L"bTV HD", L"15:30 - 16:30 Студио Избори 2016", LOGO2_LOC);
-    shared_ptr<ListLayout> ll = viewFactory->makeListLayout(false);
-
-    shared_ptr<Icon> text_box = viewFactory->makeIcon(TEXTBOX_LOC);
-    ui::point tpos = { (1366-text_box->width())/2, 768 - 100 };
-    text_box->position(tpos);
-
-    ll->addChild(chView2);
-    ll->addChild(chView);
-    ll->addChild(chView2);
-    ll->addChild(chView);
-    ll->addChild(chView2);
-    ll->addChild(chView);
-    ll->padding(2);
-
+    shared_ptr<ui::Layout> root = viewFactory->makeRootLayout(0, 0, 1366, 768);
     shared_ptr<Icon> icon = viewFactory->makeIcon(BG_LOC);
-    shared_ptr<Icon> mouse = viewFactory->makeIcon(MOUSE_POINTER);
-
     shared_ptr<AbsoluteLayout> absLayout = viewFactory->makeAbsoluteLayout();
-
     absLayout->addChild(icon);
-    absLayout->addChild(ll);
-    absLayout->addChild(text_box);
-    absLayout->addChild(mouse);
-
     root->addChild(absLayout);
-
-
     ui::TaskQueue<TaskBase*> taskQueue;
-    Enqueuer enq(taskQueue, ll, root);
-    enq.addTask(new Update(ll));
+    Enqueuer enq(taskQueue, root);
+//    enq.addTask(new Update(ll));
     enq.addTask(new Redraw(root));
-//    enq.addTask(new ReadMouse("/dev/input/mouse0", mouse));
+//    enq.addTask(new ReadMouse(mouse));
     taskQueue.push(&enq);
     taskQueue.exec();
 }

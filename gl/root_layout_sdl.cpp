@@ -28,7 +28,7 @@ private:
 } sc_sdl_init;
 
 static void setGLAttribute(SDL_GLattr attr, int value) {
-    bool res = SDL_GL_SetAttribute(attr, value) != 0;
+    bool res = SDL_GL_SetAttribute(attr, value) == 0;
     assert(res);
 }
 
@@ -40,9 +40,6 @@ RootLayout_SDL::RootLayout_SDL(point pos, uint w, uint h) :
     height(h);
 
     bool res = sc_sdl_init.ok();
-    assert(res);
-    SDL_DisplayMode videomode;
-    res = SDL_GetCurrentDisplayMode (0, &videomode) != 0;
     assert(res);
 
     setGLAttribute(SDL_GL_RED_SIZE, 8);

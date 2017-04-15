@@ -3,6 +3,7 @@
 #include "icon_gl.h"
 #include "list_layout_gl.h"
 #include "absolute_layout_gl.h"
+#include "root_layout_sdl.h"
 
 using std::string;
 using std::wstring;
@@ -21,6 +22,7 @@ using gl::Label_GL;
 using gl::Icon_GL;
 using gl::ListLayout_GL;
 using gl::AbsoluteLayout_GL;
+using gl::RootLayout_SDL;
 
 shared_ptr<Label> ViewFactory_GL::makeLabel(const wstring &text, uint sz) {
     return new Label_GL(text, sz);
@@ -36,4 +38,9 @@ shared_ptr<ListLayout> ViewFactory_GL::makeListLayout(bool horiz) {
 
 shared_ptr<AbsoluteLayout> ViewFactory_GL::makeAbsoluteLayout() {
     return new AbsoluteLayout_GL;
+}
+
+ui::shared_ptr<ui::Layout> ViewFactory_GL::makeRootLayout(uint sx, uint sy, uint w, uint h) {
+    ui::point pos = { sx, sy };
+    return RootLayout_SDL::create(pos, w, h);
 }
